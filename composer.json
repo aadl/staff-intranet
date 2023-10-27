@@ -105,9 +105,24 @@
     },
     "extra": {
         "laravel": {
+            "providers": [
+                "Aadl\\Safety\\SafetyServiceProvider"
+            ],
+            "aliases": {
+                "Safety": "Aadl\\Safety\\SafetyServiceProvider"
+            },
             "dont-discover": []
         }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": {
+        "aadl/safety": {
+            "type": "path",
+            "url": "packages/aadl/safety",
+            "options": {
+                "symlink": true
+            }
+        }
+    }
 }
