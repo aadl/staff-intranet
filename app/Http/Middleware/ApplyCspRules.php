@@ -27,7 +27,6 @@ class ApplyCspRules
     public function handle($request, Closure $next)
     {
         view()->share('cspNonce', $this->cspService->getNonce());
-        Vite::useCspNonce($this->cspService->getNonce());
         if ($this->cspService->allowedIFrameHostsConfigured()) {
             config()->set('session.same_site', 'none');
         }
