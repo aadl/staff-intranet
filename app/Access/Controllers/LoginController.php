@@ -137,7 +137,7 @@ class LoginController extends Controller
         $request->session()->regenerate();
         $this->clearLoginAttempts($request);
 
-        return redirect()->intended('/');
+        return redirect()->intended();
     }
 
     /**
