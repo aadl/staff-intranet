@@ -17,6 +17,7 @@
         "ext-mbstring": "*",
         "ext-xml": "*",
         "ext-zip": "*",
+        "aadl/safety": "dev-main@dev",
         "bacon/bacon-qr-code": "^3.0",
         "dompdf/dompdf": "^3.1",
         "guzzlehttp/guzzle": "^7.4",
@@ -107,9 +108,24 @@
     },
     "extra": {
         "laravel": {
+            "providers": [
+                "Aadl\\Safety\\SafetyServiceProvider"
+            ],
+            "aliases": {
+                "Safety": "Aadl\\Safety\\SafetyServiceProvider"
+            },
             "dont-discover": []
         }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": {
+        "aadl/safety": {
+            "type": "path",
+            "url": "packages/aadl/safety",
+            "options": {
+                "symlink": true
+            }
+        }
+    }
 }

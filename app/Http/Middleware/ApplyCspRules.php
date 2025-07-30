@@ -5,6 +5,7 @@ namespace BookStack\Http\Middleware;
 use BookStack\Util\CspService;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Vite;
 
 class ApplyCspRules
 {

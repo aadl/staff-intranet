@@ -1,0 +1,3 @@
+[submodule "packages/aadl/safety"]
+	path = packages/aadl/safety
+	url = https://github.com/aadl/safety.git
