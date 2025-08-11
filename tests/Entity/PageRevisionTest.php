@@ -136,7 +136,7 @@ class PageRevisionTest extends TestCase
         $page = $this->entities->page();
         $this->createRevisions($page, 2);
 
-        $pageView = $this->get($page->getUrl());
+        $pageView = $this->asViewer()->get($page->getUrl());
         $pageView->assertSee('Revision #' . $page->revision_count);
     }
 
@@ -201,6 +201,18 @@ class PageRevisionTest extends TestCase
         $this->createRevisions($page, 1, ['markdown' => '# Some markdown content']);
         $resp = $this->get($page->refresh()->getUrl('/revisions'));
         $this->withHtml($resp)->assertElementContains('.item-list-row > div:nth-child(2)', 'Markdown)');
+    }
+
+    public function test_revision_changes_link_not_shown_for_oldest_revision()
+    {
+        $page = $this->entities->page();
+        $this->createRevisions($page, 3, ['html' => 'new page html']);
+
+        $resp = $this->asAdmin()->get($page->refresh()->getUrl('/revisions'));
+        $html = $this->withHtml($resp);
+
+        $html->assertElementNotExists('.item-list > .item-list-row:last-child a[href*="/changes"]');
+        $html->assertElementContains('.item-list > .item-list-row:nth-child(2)', 'Changes');
     }
 
     public function test_revision_restore_action_only_visible_with_permission()

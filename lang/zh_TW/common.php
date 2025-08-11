@@ -6,7 +6,7 @@ return [
 
     // Buttons
     'cancel' => '取消',
-    'close' => 'Close',
+    'close' => '關閉',
     'confirm' => '確認',
     'back' => '返回',
     'save' => '儲存',
@@ -20,7 +20,7 @@ return [
     'description' => '描述',
     'role' => '角色',
     'cover_image' => '封面圖片',
-    'cover_image_description' => '此圖片大小應約為 440x250px。',
+    'cover_image_description' => '雖然圖片會在不同情境下自動調整顯示方式，但應接近 440x250 像素',
 
     // Actions
     'actions' => '動作',
@@ -30,6 +30,8 @@ return [
     'create' => '建立',
     'update' => '更新',
     'edit' => '編輯',
+    'archive' => '歸檔',
+    'unarchive' => 'Un-Archive',
     'sort' => '排序',
     'move' => '移動',
     'copy' => '複製',
@@ -42,7 +44,7 @@ return [
     'remove' => '移除',
     'add' => '新增',
     'configure' => '配置',
-    'manage' => 'Manage',
+    'manage' => '管理',
     'fullscreen' => '全螢幕',
     'favourite' => '最愛',
     'unfavourite' => '取消最愛',
@@ -52,6 +54,7 @@ return [
     'filter_clear' => '清理過濾',
     'download' => '下載',
     'open_in_tab' => '在新分頁中開啟',
+    'open' => '開啟',
 
     // Sort Options
     'sort_options' => '排序選項',
@@ -106,4 +109,7 @@ return [
     // Not directly used but available for convenience to users.
     'privacy_policy' => '隱私權政策',
     'terms_of_service' => '服務條款',
+
+    // OpenSearch
+    'opensearch_description' => '搜尋 :appName',
 ];

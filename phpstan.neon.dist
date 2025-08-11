@@ -1,5 +1,5 @@
 includes:
-    - ./vendor/nunomaduro/larastan/extension.neon
+    - ./vendor/larastan/larastan/extension.neon
 
 parameters:
 
@@ -9,7 +9,9 @@ parameters:
     # The level 8 is the highest level
     level: 1
 
-    phpVersion: 80002
+    phpVersion:
+        min: 80200
+        max: 80400
 
     bootstrapFiles:
       - bootstrap/phpstan.php
@@ -19,5 +21,4 @@ parameters:
 
     excludePaths:
         - ./Config/**/*.php
-
-    checkMissingIterableValueType: false
+        - ./dev/**/*.php

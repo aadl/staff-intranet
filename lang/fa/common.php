@@ -20,7 +20,7 @@ return [
     'description' => 'توضیحات',
     'role' => 'نقش',
     'cover_image' => 'تصویر روی جلد',
-    'cover_image_description' => 'سایز تصویر باید 440x250 باشد.',
+    'cover_image_description' => 'تصویر باید حدودا 250*440 پیکسل باشد اما از آنجا که متناسب با رابط کاربری کوچک و بزرگ شده و بریده میشود، پس ابعاد نمایش داده شده متفاوت خواهند بود.',
 
     // Actions
     'actions' => 'عملیات',
@@ -30,6 +30,8 @@ return [
     'create' => 'ایجاد',
     'update' => 'به‌روز رسانی',
     'edit' => 'ويرايش',
+    'archive' => 'انتقال به بایگانی',
+    'unarchive' => 'فعّال‌سازی دوباره (خروج از بایگانی)',
     'sort' => 'مرتب سازی',
     'move' => 'جابجایی',
     'copy' => 'کپی',
@@ -42,7 +44,7 @@ return [
     'remove' => 'حذف',
     'add' => 'ﺍﻓﺰﻭﺩﻥ',
     'configure' => 'پیکربندی کنید',
-    'manage' => 'Manage',
+    'manage' => 'مدیریت تنظیمات',
     'fullscreen' => 'تمام صفحه',
     'favourite' => 'علاقه‌مندی',
     'unfavourite' => 'حذف از علاقه‌مندی',
@@ -52,6 +54,7 @@ return [
     'filter_clear' => 'پاک کردن فیلتر',
     'download' => 'دانلود',
     'open_in_tab' => 'باز کردن در تب جدید',
+    'open' => 'بازکردن',
 
     // Sort Options
     'sort_options' => 'گزینه‌های مرتب سازی',
@@ -70,7 +73,7 @@ return [
     'back_to_top' => 'بازگشت به بالا',
     'skip_to_main_content' => 'رفتن به محتوای اصلی',
     'toggle_details' => 'معکوس کردن اطلاعات',
-    'toggle_thumbnails' => 'معکوس ریز عکس ها',
+    'toggle_thumbnails' => 'معکوس کردن ریزعکس‌ها',
     'details' => 'جزییات',
     'grid_view' => 'نمایش شبکه‌ای',
     'list_view' => 'نمای لیست',
@@ -106,4 +109,7 @@ return [
     // Not directly used but available for convenience to users.
     'privacy_policy' => 'سیاست حفظ حریم خصوصی',
     'terms_of_service' => 'شرایط خدمات',
+
+    // OpenSearch
+    'opensearch_description' => 'جست‌وجو در :appName',
 ];

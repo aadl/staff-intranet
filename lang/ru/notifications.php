@@ -5,14 +5,15 @@
 return [
 
     'new_comment_subject' => 'Новый комментарий на странице: :pageName',
-    'new_comment_intro' => 'A user has commented on a page in :appName:',
+    'new_comment_intro' => 'Пользователь прокомментировал страницу в :appName:',
     'new_page_subject' => 'Новая страница: :pageName',
-    'new_page_intro' => 'A new page has been created in :appName:',
-    'updated_page_subject' => 'Updated page: :pageName',
-    'updated_page_intro' => 'A page has been updated in :appName:',
-    'updated_page_debounce' => 'To prevent a mass of notifications, for a while you won\'t be sent notifications for further edits to this page by the same editor.',
+    'new_page_intro' => 'Новая страница была создана в :appName:',
+    'updated_page_subject' => 'Обновлена страница: :pageName',
+    'updated_page_intro' => 'Страница была обновлена в :appName:',
+    'updated_page_debounce' => 'Чтобы предотвратить массовые уведомления, в течение некоторого времени вы не будете получать уведомления о дальнейших правках этой страницы этим же редактором.',
 
     'detail_page_name' => 'Имя страницы:',
+    'detail_page_path' => 'Путь страницы:',
     'detail_commenter' => 'Комментатор:',
     'detail_comment' => 'Комментарий:',
     'detail_created_by' => 'Создано:',
@@ -21,6 +22,6 @@ return [
     'action_view_comment' => 'Просмотреть комментарий',
     'action_view_page' => 'Посмотреть страницу',
 
-    'footer_reason' => 'This notification was sent to you because :link cover this type of activity for this item.',
+    'footer_reason' => 'Это уведомление было отправлено, потому что :link покрывает этот тип активности для этого элемента.',
     'footer_reason_link' => 'ваши настройки уведомлений',
 ];

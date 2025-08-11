@@ -10,6 +10,7 @@ return [
 
     // Auth
     'error_user_exists_different_creds' => ':email kontuakin erabiltzaile bat badago, baina kredentzial ezberdinekin.',
+    'auth_pre_register_theme_prevention' => 'User account could not be registered for the provided details',
     'email_already_confirmed' => 'Email kontua berretsita dago, saiatu saioa hasten.',
     'email_confirmation_invalid' => 'Berrezpen token hau ez da baliozkoa eta iada erabiltzen da, mesedez, saiatu berriz erregistroa burutzen.',
     'email_confirmation_expired' => 'Berrezpen tokena iraungi da, berrezpen email berri bnat bidali da.',
@@ -19,12 +20,10 @@ return [
     'ldap_extension_not_installed' => 'PHP LDAP extentsioa ez dago instalatuta',
     'ldap_cannot_connect' => 'Ezin izan da ldap zerbitzarira konektatu, hasierako konexioak huts egin du',
     'saml_already_logged_in' => 'Saioa aurretik hasita dago',
-    'saml_user_not_registered' => ':name erabiltzailea ez dago erregistratua eta erregistro automatikoa ezgaituta dago',
     'saml_no_email_address' => 'Ezin izan dugu posta helbiderik aurkitu erabiltzaile honentzat, kanpoko autentifikazio zerbitzuak bidalitako datuetan',
     'saml_invalid_response_id' => 'Kanpoko egiazkotasun-sistemaren eskaria ez du onartzen aplikazio honek abiarazitako prozesu batek. Loginean atzera egitea izan daiteke arrazoia.',
     'saml_fail_authed' => 'Login using :system failed, system did not provide successful authorization',
     'oidc_already_logged_in' => 'Dagoeneko saioa hasita',
-    'oidc_user_not_registered' => 'The user :name is not registered and automatic registration is disabled',
     'oidc_no_email_address' => 'Could not find an email address, for this user, in the data provided by the external authentication system',
     'oidc_fail_authed' => 'Login using :system failed, system did not provide successful authorization',
     'social_no_action_defined' => 'No action defined',
@@ -38,18 +37,23 @@ return [
     'social_driver_not_found' => 'Social driver not found',
     'social_driver_not_configured' => 'Your :socialAccount social settings are not configured correctly.',
     'invite_token_expired' => 'This invitation link has expired. You can instead try to reset your account password.',
+    'login_user_not_found' => 'A user for this action could not be found.',
 
     // System
     'path_not_writable' => 'File path :filePath could not be uploaded to. Ensure it is writable to the server.',
     'cannot_get_image_from_url' => 'Cannot get image from :url',
     'cannot_create_thumbs' => 'The server cannot create thumbnails. Please check you have the GD PHP extension installed.',
     'server_upload_limit' => 'The server does not allow uploads of this size. Please try a smaller file size.',
+    'server_post_limit' => 'The server cannot receive the provided amount of data. Try again with less data or a smaller file.',
     'uploaded'  => 'The server does not allow uploads of this size. Please try a smaller file size.',
 
     // Drawing & Images
     'image_upload_error' => 'Errorea gertatu da irudia igotzerakoan',
     'image_upload_type_error' => 'The image type being uploaded is invalid',
     'image_upload_replace_type' => 'Image file replacements must be of the same type',
+    'image_upload_memory_limit' => 'Failed to handle image upload and/or create thumbnails due to system resource limits.',
+    'image_thumbnail_memory_limit' => 'Failed to create image size variations due to system resource limits.',
+    'image_gallery_thumbnail_memory_limit' => 'Failed to create gallery thumbnails due to system resource limits.',
     'drawing_data_not_found' => 'Drawing data could not be loaded. The drawing file might no longer exist or you may not have permission to access it.',
 
     // Attachments
@@ -74,6 +78,7 @@ return [
     // Users
     'users_cannot_delete_only_admin' => 'You cannot delete the only admin',
     'users_cannot_delete_guest' => 'You cannot delete the guest user',
+    'users_could_not_send_invite' => 'Could not create user since invite email failed to send',
 
     // Roles
     'role_cannot_be_edited' => 'This role cannot be edited',
@@ -99,6 +104,18 @@ return [
     'error_occurred' => 'Akats bat gertatu da',
     'app_down' => ':appName is down right now',
     'back_soon' => 'It will be back up soon.',
+
+    // Import
+    'import_zip_cant_read' => 'Could not read ZIP file.',
+    'import_zip_cant_decode_data' => 'Could not find and decode ZIP data.json content.',
+    'import_zip_no_data' => 'ZIP file data has no expected book, chapter or page content.',
+    'import_validation_failed' => 'Import ZIP failed to validate with errors:',
+    'import_zip_failed_notification' => 'Failed to import ZIP file.',
+    'import_perms_books' => 'You are lacking the required permissions to create books.',
+    'import_perms_chapters' => 'You are lacking the required permissions to create chapters.',
+    'import_perms_pages' => 'You are lacking the required permissions to create pages.',
+    'import_perms_images' => 'You are lacking the required permissions to create images.',
+    'import_perms_attachments' => 'You are lacking the required permission to create attachments.',
 
     // API errors
     'api_no_authorization_found' => 'No authorization token found on the request',

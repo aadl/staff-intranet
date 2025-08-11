@@ -2,7 +2,7 @@
 
 namespace BookStack\Uploads;
 
-use BookStack\Entities\Models\Page;
+use BookStack\Entities\Queries\PageQueries;
 use BookStack\Exceptions\ImageUploadException;
 use BookStack\Permissions\PermissionApplicator;
 use Exception;
@@ -13,7 +13,9 @@ class ImageRepo
 {
     public function __construct(
         protected ImageService $imageService,
-        protected PermissionApplicator $permissions
+        protected PermissionApplicator $permissions,
+        protected ImageResizer $imageResizer,
+        protected PageQueries $pageQueries,
     ) {
     }
 
@@ -29,19 +31,13 @@ class ImageRepo
      * Execute a paginated query, returning in a standard format.
      * Also runs the query through the restriction system.
      */
-    private function returnPaginated($query, $page = 1, $pageSize = 24): array
+    protected function returnPaginated(Builder $query, int $page = 1, int $pageSize = 24): array
     {
         $images = $query->orderBy('created_at', 'desc')->skip($pageSize * ($page - 1))->take($pageSize + 1)->get();
-        $hasMore = count($images) > $pageSize;
-
-        $returnImages = $images->take($pageSize);
-        $returnImages->each(function (Image $image) {
-            $this->loadThumbs($image);
-        });
 
         return [
-            'images'   => $returnImages,
-            'has_more' => $hasMore,
+            'images'   => $images->take($pageSize),
+            'has_more' => count($images) > $pageSize,
         ];
     }
 
@@ -53,9 +49,9 @@ class ImageRepo
         string $type,
         int $page = 0,
         int $pageSize = 24,
-        int $uploadedTo = null,
-        string $search = null,
-        callable $whereClause = null
+        ?int $uploadedTo = null,
+        ?string $search = null,
+        ?callable $whereClause = null
     ): array {
         $imageQuery = Image::query()->where('type', '=', strtolower($type));
 
@@ -82,21 +78,20 @@ class ImageRepo
      */
     public function getEntityFiltered(
         string $type,
-        string $filterType = null,
-        int $page = 0,
-        int $pageSize = 24,
-        int $uploadedTo = null,
-        string $search = null
+        ?string $filterType,
+        int $page,
+        int $pageSize,
+        int $uploadedTo,
+        ?string $search
     ): array {
-        /** @var Page $contextPage */
-        $contextPage = Page::visible()->findOrFail($uploadedTo);
+        $contextPage = $this->pageQueries->findVisibleByIdOrFail($uploadedTo);
         $parentFilter = null;
 
         if ($filterType === 'book' || $filterType === 'page') {
             $parentFilter = function (Builder $query) use ($filterType, $contextPage) {
                 if ($filterType === 'page') {
                     $query->where('uploaded_to', '=', $contextPage->id);
-                } elseif ($filterType === 'book') {
+                } else if ($filterType === 'book') {
                     $validPageIds = $contextPage->book->pages()
                         ->scopes('visible')
                         ->pluck('id')
@@ -114,12 +109,18 @@ class ImageRepo
      *
      * @throws ImageUploadException
      */
-    public function saveNew(UploadedFile $uploadFile, string $type, int $uploadedTo = 0, int $resizeWidth = null, int $resizeHeight = null, bool $keepRatio = true): Image
-    {
+    public function saveNew(
+        UploadedFile $uploadFile,
+        string $type,
+        int $uploadedTo = 0,
+        ?int $resizeWidth = null,
+        ?int $resizeHeight = null,
+        bool $keepRatio = true
+    ): Image {
         $image = $this->imageService->saveNewFromUpload($uploadFile, $type, $uploadedTo, $resizeWidth, $resizeHeight, $keepRatio);
 
         if ($type !== 'system') {
-            $this->loadThumbs($image);
+            $this->imageResizer->loadGalleryThumbnailsForImage($image, true);
         }
 
         return $image;
@@ -133,7 +134,7 @@ class ImageRepo
     public function saveNewFromData(string $imageName, string $imageData, string $type, int $uploadedTo = 0): Image
     {
         $image = $this->imageService->saveNew($imageName, $imageData, $type, $uploadedTo);
-        $this->loadThumbs($image);
+        $this->imageResizer->loadGalleryThumbnailsForImage($image, true);
 
         return $image;
     }
@@ -160,7 +161,7 @@ class ImageRepo
         $image->fill($updateDetails);
         $image->updated_by = user()->id;
         $image->save();
-        $this->loadThumbs($image);
+        $this->imageResizer->loadGalleryThumbnailsForImage($image, false);
 
         return $image;
     }
@@ -171,7 +172,7 @@ class ImageRepo
      */
     public function updateImageFile(Image $image, UploadedFile $file): void
     {
-        if ($file->getClientOriginalExtension() !== pathinfo($image->path, PATHINFO_EXTENSION)) {
+        if (strtolower($file->getClientOriginalExtension()) !== strtolower(pathinfo($image->path, PATHINFO_EXTENSION))) {
             throw new ImageUploadException(trans('errors.image_upload_replace_type'));
         }
 
@@ -179,8 +180,9 @@ class ImageRepo
         $image->updated_by = user()->id;
         $image->touch();
         $image->save();
+
         $this->imageService->replaceExistingFromUpload($image->path, $image->type, $file);
-        $this->loadThumbs($image, true);
+        $this->imageResizer->loadGalleryThumbnailsForImage($image, true);
     }
 
     /**
@@ -188,7 +190,7 @@ class ImageRepo
      *
      * @throws Exception
      */
-    public function destroyImage(Image $image = null): void
+    public function destroyImage(?Image $image = null): void
     {
         if ($image) {
             $this->imageService->destroy($image);
@@ -213,31 +215,6 @@ class ImageRepo
     }
 
     /**
-     * Load thumbnails onto an image object.
-     */
-    public function loadThumbs(Image $image, bool $forceCreate = false): void
-    {
-        $image->setAttribute('thumbs', [
-            'gallery' => $this->getThumbnail($image, 150, 150, false, $forceCreate),
-            'display' => $this->getThumbnail($image, 1680, null, true, $forceCreate),
-        ]);
-    }
-
-    /**
-     * Get the thumbnail for an image.
-     * If $keepRatio is true only the width will be used.
-     * Checks the cache then storage to avoid creating / accessing the filesystem on every check.
-     */
-    protected function getThumbnail(Image $image, ?int $width, ?int $height, bool $keepRatio, bool $forceCreate): ?string
-    {
-        try {
-            return $this->imageService->getThumbnail($image, $width, $height, $keepRatio, $forceCreate);
-        } catch (Exception $exception) {
-            return null;
-        }
-    }
-
-    /**
      * Get the raw image data from an Image.
      */
     public function getImageData(Image $image): ?string
@@ -254,9 +231,9 @@ class ImageRepo
      */
     public function getPagesUsingImage(Image $image): array
     {
-        $pages = Page::visible()
+        $pages = $this->pageQueries->visibleForList()
             ->where('html', 'like', '%' . $image->url . '%')
-            ->get(['id', 'name', 'slug', 'book_id']);
+            ->get();
 
         foreach ($pages as $page) {
             $page->setAttribute('url', $page->getUrl());

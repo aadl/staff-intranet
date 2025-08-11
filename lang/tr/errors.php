@@ -10,6 +10,7 @@ return [
 
     // Auth
     'error_user_exists_different_creds' => ':email e-posta adresine sahip bir kullanıcı zaten var.',
+    'auth_pre_register_theme_prevention' => 'User account could not be registered for the provided details',
     'email_already_confirmed' => 'E-posta adresi zaten doğrulanmış, giriş yapmayı deneyin.',
     'email_confirmation_invalid' => 'Bu doğrulama kodu ya geçersiz ya da daha önce kullanılmış, lütfen tekrar kaydolmayı deneyin.',
     'email_confirmation_expired' => 'Doğrulama kodunun süresi doldu, yeni bir doğrulama kodu e-posta adresine gönderildi.',
@@ -19,12 +20,10 @@ return [
     'ldap_extension_not_installed' => 'LDAP PHP eklentisi kurulu değil',
     'ldap_cannot_connect' => 'LDAP sunucusuna bağlanılamadı, ilk bağlantı başarısız oldu',
     'saml_already_logged_in' => 'Zaten giriş yapılmış',
-    'saml_user_not_registered' => ':name adlı kullanıcı kayıtlı değil ve otomatik kaydolma devre dışı bırakılmış',
     'saml_no_email_address' => 'Harici kimlik doğrulama sisteminden gelen veriler, bu kullanıcının e-posta adresini içermiyor',
     'saml_invalid_response_id' => 'Harici doğrulama sistemi tarafından sağlanan bir veri talebi, bu uygulama tarafından başlatılan bir işlem tarafından tanınamadı. Giriş yaptıktan sonra geri dönmek bu soruna yol açmış olabilir.',
     'saml_fail_authed' => ':system kullanarak giriş yapma başarısız oldu; sistem, başarılı bir kimlik doğrulama sağlayamadı',
     'oidc_already_logged_in' => 'Zaten oturum açılmış',
-    'oidc_user_not_registered' => ':name adlı kullanıcı kayıtlı değil ve otomatik kaydolma devre dışı bırakılmış',
     'oidc_no_email_address' => 'Harici kimlik doğrulama sisteminden gelen veriler, bu kullanıcının e-posta adresini içermiyor',
     'oidc_fail_authed' => ':system kullanarak giriş yapma başarısız oldu; sistem, başarılı bir kimlik doğrulama sağlayamadı',
     'social_no_action_defined' => 'Herhangi bir eylem tanımlanmamış',
@@ -38,18 +37,23 @@ return [
     'social_driver_not_found' => 'Social driver bulunamadı',
     'social_driver_not_configured' => ':socialAccount ayarlarınız doğru bir şekilde ayarlanmadı.',
     'invite_token_expired' => 'Davetiye bağlantısının süresi doldu. Bunun yerine parolanızı sıfırlamayı deneyebilirsiniz.',
+    'login_user_not_found' => 'A user for this action could not be found.',
 
     // System
     'path_not_writable' => ':filePath dosya yolu yüklenemedi. Sunucuya yazılabilir olduğundan emin olun.',
     'cannot_get_image_from_url' => ':url adresindeki görsel alınamadı',
     'cannot_create_thumbs' => 'Sunucu, görsel ön izlemelerini oluşturamadı. Lütfen GD PHP eklentisinin kurulu olduğundan emin olun.',
     'server_upload_limit' => 'Sunucu bu boyutta dosya yüklemenize izin vermiyor. Lütfen daha küçük bir dosya deneyin.',
+    'server_post_limit' => 'The server cannot receive the provided amount of data. Try again with less data or a smaller file.',
     'uploaded'  => 'Sunucu bu boyutta dosya yüklemenize izin vermiyor. Lütfen daha küçük bir dosya deneyin.',
 
     // Drawing & Images
     'image_upload_error' => 'Görsel yüklenirken bir hata meydana geldi',
     'image_upload_type_error' => 'Yüklemeye çalıştığınız dosya türü geçersizdir',
     'image_upload_replace_type' => 'Görsel dosyası değişimleri, aynı dosya uzantı tipinde olmalı',
+    'image_upload_memory_limit' => 'Failed to handle image upload and/or create thumbnails due to system resource limits.',
+    'image_thumbnail_memory_limit' => 'Failed to create image size variations due to system resource limits.',
+    'image_gallery_thumbnail_memory_limit' => 'Failed to create gallery thumbnails due to system resource limits.',
     'drawing_data_not_found' => 'Çizim verileri yüklenemedi. Çizim dosyası artık mevcut olmayabilir veya erişim izniniz olmayabilir.',
 
     // Attachments
@@ -74,6 +78,7 @@ return [
     // Users
     'users_cannot_delete_only_admin' => 'Tek olan yöneticiyi silemezsiniz',
     'users_cannot_delete_guest' => 'Misafir kullanıyıcıyı silemezsiniz',
+    'users_could_not_send_invite' => 'Could not create user since invite email failed to send',
 
     // Roles
     'role_cannot_be_edited' => 'Bu rol düzenlenemez',
@@ -99,6 +104,18 @@ return [
     'error_occurred' => 'Bir Hata Oluştu',
     'app_down' => ':appName şu anda erişilemez durumda',
     'back_soon' => 'En kısa sürede tekrar erişilebilir duruma gelecektir.',
+
+    // Import
+    'import_zip_cant_read' => 'Could not read ZIP file.',
+    'import_zip_cant_decode_data' => 'Could not find and decode ZIP data.json content.',
+    'import_zip_no_data' => 'ZIP file data has no expected book, chapter or page content.',
+    'import_validation_failed' => 'Import ZIP failed to validate with errors:',
+    'import_zip_failed_notification' => 'Failed to import ZIP file.',
+    'import_perms_books' => 'You are lacking the required permissions to create books.',
+    'import_perms_chapters' => 'You are lacking the required permissions to create chapters.',
+    'import_perms_pages' => 'You are lacking the required permissions to create pages.',
+    'import_perms_images' => 'You are lacking the required permissions to create images.',
+    'import_perms_attachments' => 'You are lacking the required permission to create attachments.',
 
     // API errors
     'api_no_authorization_found' => 'Yapılan istekte, yetkilendirme anahtarı bulunamadı',

@@ -10,6 +10,7 @@ return [
 
     // Auth
     'error_user_exists_different_creds' => 'En konto med :email finnes allerede, men har andre detaljer.',
+    'auth_pre_register_theme_prevention' => 'Brukerkonto kunne ikke bli registrert for de angitte opplysningene',
     'email_already_confirmed' => 'E-posten er allerede bekreftet, du kan forsøke å logge inn.',
     'email_confirmation_invalid' => 'Denne bekreftelseskoden er allerede benyttet eller utgått. Prøv å registrere på nytt.',
     'email_confirmation_expired' => 'Bekreftelseskoden er allerede utgått, en ny e-post er sendt.',
@@ -19,12 +20,10 @@ return [
     'ldap_extension_not_installed' => 'LDAP PHP modulen er ikke installert.',
     'ldap_cannot_connect' => 'Klarer ikke koble til LDAP på denne adressen',
     'saml_already_logged_in' => 'Allerede logget inn',
-    'saml_user_not_registered' => 'Kontoen med navn :name er ikke registert, registrering er også deaktivert.',
     'saml_no_email_address' => 'Denne kontoinformasjonen finnes ikke i det eksterne autentiseringssystemet.',
     'saml_invalid_response_id' => 'Forespørselen fra det eksterne autentiseringssystemet gjenkjennes ikke av en prosess som startes av dette programmet. Å navigere tilbake etter pålogging kan forårsake dette problemet.',
     'saml_fail_authed' => 'Innlogging gjennom :system feilet. Fikk ikke kontakt med autentiseringstjeneren.',
     'oidc_already_logged_in' => 'Allerede logget inn',
-    'oidc_user_not_registered' => 'Brukeren :name er ikke registrert og automatisk registrering er deaktivert',
     'oidc_no_email_address' => 'Finner ikke en e-postadresse, for denne brukeren, i dataene som leveres av det eksterne autentiseringssystemet',
     'oidc_fail_authed' => 'Innlogging ved hjelp av :system feilet, systemet ga ikke vellykket godkjenning',
     'social_no_action_defined' => 'Ingen handlinger er definert',
@@ -38,18 +37,23 @@ return [
     'social_driver_not_found' => 'Autentiseringstjeneste fra sosiale medier er ikke installert',
     'social_driver_not_configured' => 'Dine :socialAccount innstilliner er ikke angitt.',
     'invite_token_expired' => 'Invitasjonslenken har utgått, du kan forsøke å be om nytt passord istede.',
+    'login_user_not_found' => 'En bruker for denne handlingen ble ikke funnet.',
 
     // System
     'path_not_writable' => 'Filstien :filePath aksepterer ikke filer, du må sjekke filstitilganger i systemet.',
     'cannot_get_image_from_url' => 'Kan ikke hente bilde fra :url',
     'cannot_create_thumbs' => 'Kan ikke opprette miniatyrbilder. GD PHP er ikke installert.',
     'server_upload_limit' => 'Vedlegget er for stort, forsøk med et mindre vedlegg.',
+    'server_post_limit' => 'Serveren kan ikke motta det denne mengde data. Prøv igjen med mindre data eller en mindre fil.',
     'uploaded'  => 'Tjenesten aksepterer ikke vedlegg som er så stor.',
 
     // Drawing & Images
     'image_upload_error' => 'Bildet kunne ikke lastes opp, forsøk igjen.',
     'image_upload_type_error' => 'Bildeformatet støttes ikke, forsøk med et annet format.',
     'image_upload_replace_type' => 'Bildeerstatning må være av samme type',
+    'image_upload_memory_limit' => 'Kunne ikke håndtere bildeopplasting og/eller lage miniatyrbilder på grunn av systemressursgrensen.',
+    'image_thumbnail_memory_limit' => 'Kunne ikke opprette variasjoner i bildestørrelse på grunn av systemressursgrensen.',
+    'image_gallery_thumbnail_memory_limit' => 'Kunne ikke opprette miniatyrbilder på grunn av systemressursgrensene.',
     'drawing_data_not_found' => 'Tegningsdata kunne ikke lastes. Det er mulig at tegningsfilen ikke finnes lenger, eller du har ikke rettigheter til å få tilgang til den.',
 
     // Attachments
@@ -72,8 +76,9 @@ return [
     'guests_cannot_save_drafts' => 'Gjester kan ikke lagre utkast',
 
     // Users
-    'users_cannot_delete_only_admin' => 'Du kan ikke kaste ut den eneste administratoren',
+    'users_cannot_delete_only_admin' => 'Du kan ikke slette den eneste administratoren',
     'users_cannot_delete_guest' => 'Du kan ikke slette gjestebrukeren (Du kan deaktivere offentlig visning istede)',
+    'users_could_not_send_invite' => 'Kunne ikke opprette bruker fordi invitasjons e-post ikke kunne sendes',
 
     // Roles
     'role_cannot_be_edited' => 'Denne rollen kan ikke endres',
@@ -99,6 +104,18 @@ return [
     'error_occurred' => 'En feil oppsto',
     'app_down' => ':appName er nede for øyeblikket',
     'back_soon' => 'Den vil snart komme tilbake.',
+
+    // Import
+    'import_zip_cant_read' => 'Kunne ikke lese ZIP-filen.',
+    'import_zip_cant_decode_data' => 'Kunne ikke finne og dekode ZIP data.json innhold.',
+    'import_zip_no_data' => 'ZIP-fildata har ingen forventet bok, kapittel eller sideinnhold.',
+    'import_validation_failed' => 'Import av ZIP feilet i å validere med feil:',
+    'import_zip_failed_notification' => 'Kunne ikke importere ZIP-fil.',
+    'import_perms_books' => 'Du mangler nødvendige tillatelser for å lage bøker.',
+    'import_perms_chapters' => 'Du mangler de nødvendige tillatelsene for å opprette kapittel.',
+    'import_perms_pages' => 'Du mangler nødvendige tillatelser for å opprette sider.',
+    'import_perms_images' => 'Du mangler de nødvendige tillatelsene for å opprette bilder.',
+    'import_perms_attachments' => 'Du mangler nødvendig tillatelse for å opprette vedlegg.',
 
     // API errors
     'api_no_authorization_found' => 'Ingen autorisasjonstoken ble funnet på forespørselen',

@@ -1,32 +1,51 @@
-import {build as buildEditorConfig} from '../wysiwyg/config';
 import {Component} from './component';
 
 export class WysiwygEditor extends Component {
 
     setup() {
         this.elem = this.$el;
+        this.editContainer = this.$refs.editContainer;
+        this.input = this.$refs.input;
 
-        this.pageId = this.$opts.pageId;
-        this.textDirection = this.$opts.textDirection;
-        this.isDarkMode = document.documentElement.classList.contains('dark-mode');
+        /** @var {SimpleWysiwygEditorInterface|null} */
+        this.editor = null;
 
-        this.tinyMceConfig = buildEditorConfig({
-            language: this.$opts.language,
-            containerElement: this.elem,
-            darkMode: this.isDarkMode,
-            textDirection: this.textDirection,
-            drawioUrl: this.getDrawIoUrl(),
-            pageId: Number(this.pageId),
-            translations: {
-                imageUploadErrorText: this.$opts.imageUploadErrorText,
-                serverUploadLimitText: this.$opts.serverUploadLimitText,
-            },
-            translationMap: window.editor_translations,
+        const translations = {
+            ...window.editor_translations,
+            imageUploadErrorText: this.$opts.imageUploadErrorText,
+            serverUploadLimitText: this.$opts.serverUploadLimitText,
+        };
+
+        window.importVersioned('wysiwyg').then(wysiwyg => {
+            const editorContent = this.input.value;
+            this.editor = wysiwyg.createPageEditorInstance(this.editContainer, editorContent, {
+                drawioUrl: this.getDrawIoUrl(),
+                pageId: Number(this.$opts.pageId),
+                darkMode: document.documentElement.classList.contains('dark-mode'),
+                textDirection: this.$opts.textDirection,
+                translations,
+            });
+            window.wysiwyg = this.editor;
         });
 
-        window.$events.emitPublic(this.elem, 'editor-tinymce::pre-init', {config: this.tinyMceConfig});
-        window.tinymce.init(this.tinyMceConfig).then(editors => {
-            this.editor = editors[0];
+        let handlingFormSubmit = false;
+        this.input.form.addEventListener('submit', event => {
+            if (!this.editor) {
+                return;
+            }
+
+            if (!handlingFormSubmit) {
+                event.preventDefault();
+                handlingFormSubmit = true;
+                this.editor.getContentAsHtml().then(html => {
+                    this.input.value = html;
+                    setTimeout(() => {
+                        this.input.form.requestSubmit();
+                    }, 5);
+                });
+            } else {
+                handlingFormSubmit = false;
+            }
         });
     }
 
@@ -41,11 +60,11 @@ export class WysiwygEditor extends Component {
     /**
      * Get the content of this editor.
      * Used by the parent page editor component.
-     * @return {{html: String}}
+     * @return {Promise<{html: String}>}
      */
-    getContent() {
+    async getContent() {
         return {
-            html: this.editor.getContent(),
+            html: await this.editor.getContentAsHtml(),
         };
     }
 

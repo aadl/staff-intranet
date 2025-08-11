@@ -1,5 +1,5 @@
-import {onSelect} from '../services/dom';
-import {KeyboardNavigationHandler} from '../services/keyboard-navigation';
+import {findClosestScrollContainer, onSelect} from '../services/dom.ts';
+import {KeyboardNavigationHandler} from '../services/keyboard-navigation.ts';
 import {Component} from './component';
 
 /**
@@ -33,7 +33,9 @@ export class Dropdown extends Component {
         const menuOriginalRect = this.menu.getBoundingClientRect();
         let heightOffset = 0;
         const toggleHeight = this.toggle.getBoundingClientRect().height;
-        const dropUpwards = menuOriginalRect.bottom > window.innerHeight;
+        const containerBounds = findClosestScrollContainer(this.menu).getBoundingClientRect();
+        const dropUpwards = menuOriginalRect.bottom > containerBounds.bottom;
+        const containerRect = this.container.getBoundingClientRect();
 
         // If enabled, Move to body to prevent being trapped within scrollable sections
         if (this.moveMenu) {
@@ -52,9 +54,13 @@ export class Dropdown extends Component {
         if (dropUpwards) {
             this.menu.style.top = 'initial';
             this.menu.style.bottom = `${heightOffset}px`;
+            const maxHeight = (window.innerHeight - 40) - (window.innerHeight - containerRect.bottom);
+            this.menu.style.maxHeight = `${Math.floor(maxHeight)}px`;
         } else {
             this.menu.style.top = `${heightOffset}px`;
             this.menu.style.bottom = 'initial';
+            const maxHeight = (window.innerHeight - 40) - containerRect.top;
+            this.menu.style.maxHeight = `${Math.floor(maxHeight)}px`;
         }
 
         // Set listener to hide on mouse leave or window click
@@ -91,6 +97,7 @@ export class Dropdown extends Component {
         this.toggle.setAttribute('aria-expanded', 'false');
         this.menu.style.top = '';
         this.menu.style.bottom = '';
+        this.menu.style.maxHeight = '';
 
         if (this.moveMenu) {
             this.menu.style.position = '';

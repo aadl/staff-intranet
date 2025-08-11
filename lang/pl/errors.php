@@ -10,6 +10,7 @@ return [
 
     // Auth
     'error_user_exists_different_creds' => 'Użytkownik o adresie :email już istnieje, ale używa innych poświadczeń.',
+    'auth_pre_register_theme_prevention' => 'Konto użytkownika nie może być zarejestrowane z podanymi danymi',
     'email_already_confirmed' => 'E-mail został potwierdzony, spróbuj się zalogować.',
     'email_confirmation_invalid' => 'Ten token jest nieprawidłowy lub został już wykorzystany. Spróbuj zarejestrować się ponownie.',
     'email_confirmation_expired' => 'Ten token potwierdzający wygasł. Wysłaliśmy Ci kolejny.',
@@ -19,12 +20,10 @@ return [
     'ldap_extension_not_installed' => 'Rozszerzenie LDAP PHP nie zostało zainstalowane',
     'ldap_cannot_connect' => 'Nie można połączyć z serwerem LDAP, połączenie nie zostało ustanowione',
     'saml_already_logged_in' => 'Już zalogowany',
-    'saml_user_not_registered' => 'Użytkownik :name nie jest zarejestrowany i automatyczna rejestracja jest wyłączona',
     'saml_no_email_address' => 'Nie można odnaleźć adresu email dla tego użytkownika w danych dostarczonych przez zewnętrzny system uwierzytelniania',
     'saml_invalid_response_id' => 'Żądanie z zewnętrznego systemu uwierzytelniania nie zostało rozpoznane przez proces rozpoczęty przez tę aplikację. Cofnięcie po zalogowaniu mogło spowodować ten problem.',
     'saml_fail_authed' => 'Logowanie przy użyciu :system nie powiodło się, system nie mógł pomyślnie ukończyć uwierzytelniania',
     'oidc_already_logged_in' => 'Już zalogowany',
-    'oidc_user_not_registered' => 'Użytkownik :name nie jest zarejestrowany, a automatyczna rejestracja jest wyłączona',
     'oidc_no_email_address' => 'Nie można odnaleźć adresu email dla tego użytkownika w danych dostarczonych przez zewnętrzny system uwierzytelniania',
     'oidc_fail_authed' => 'Logowanie przy użyciu :system nie powiodło się, system nie mógł pomyślnie ukończyć uwierzytelniania',
     'social_no_action_defined' => 'Brak zdefiniowanej akcji',
@@ -38,18 +37,23 @@ return [
     'social_driver_not_found' => 'Funkcja społecznościowa nie została odnaleziona',
     'social_driver_not_configured' => 'Ustawienia konta :socialAccount nie są poprawne.',
     'invite_token_expired' => 'Zaproszenie wygasło. Możesz spróować zresetować swoje hasło.',
+    'login_user_not_found' => 'Użytkownik dla tej akcji nie został znaleziony.',
 
     // System
     'path_not_writable' => 'Zapis do ścieżki :filePath jest niemożliwy. Upewnij się że aplikacja ma prawa do zapisu plików na serwerze.',
     'cannot_get_image_from_url' => 'Nie można pobrać obrazka z :url',
     'cannot_create_thumbs' => 'Serwer nie może utworzyć miniaturek. Upewnij się że rozszerzenie GD PHP zostało zainstalowane.',
     'server_upload_limit' => 'Serwer nie pozwala na przyjęcie pliku o tym rozmiarze. Spróbuj przesłać plik o mniejszym rozmiarze.',
+    'server_post_limit' => 'Serwer nie może przyjąć tej ilości danych. Spróbuj ponownie z mniejszą ilością danych lub mniejszym plikiem.',
     'uploaded'  => 'Serwer nie pozwala na przyjęcie pliku o tym rozmiarze. Spróbuj przesłać plik o mniejszym rozmiarze.',
 
     // Drawing & Images
     'image_upload_error' => 'Wystąpił błąd podczas przesyłania obrazka',
     'image_upload_type_error' => 'Typ przesłanego obrazka jest nieprwidłowy.',
     'image_upload_replace_type' => 'Zamienniki plików graficznych muszą być tego samego typu',
+    'image_upload_memory_limit' => 'Nie udało się obsłużyć przesyłania zdjęć i/lub tworzenia miniatur ze względu na limity zasobów systemowych.',
+    'image_thumbnail_memory_limit' => 'Nie udało się utworzyć wariantów rozmiaru obrazu ze względu na limity zasobów systemowych.',
+    'image_gallery_thumbnail_memory_limit' => 'Nie udało się utworzyć miniatur galerii ze względu na limity zasobów systemowych.',
     'drawing_data_not_found' => 'Nie można załadować danych rysunku. Plik rysunku może już nie istnieć lub nie masz uprawnień dostępu do niego.',
 
     // Attachments
@@ -74,6 +78,7 @@ return [
     // Users
     'users_cannot_delete_only_admin' => 'Nie możesz usunąć jedynego administratora',
     'users_cannot_delete_guest' => 'Nie możesz usunąć użytkownika-gościa',
+    'users_could_not_send_invite' => 'Nie można utworzyć użytkownika, ponieważ nie udało się wysłać wiadomości e-mail z zaproszeniem',
 
     // Roles
     'role_cannot_be_edited' => 'Ta rola nie może być edytowana',
@@ -99,6 +104,18 @@ return [
     'error_occurred' => 'Wystąpił błąd',
     'app_down' => ':appName jest aktualnie wyłączona',
     'back_soon' => 'Niedługo zostanie uruchomiona ponownie.',
+
+    // Import
+    'import_zip_cant_read' => 'Could not read ZIP file.',
+    'import_zip_cant_decode_data' => 'Could not find and decode ZIP data.json content.',
+    'import_zip_no_data' => 'ZIP file data has no expected book, chapter or page content.',
+    'import_validation_failed' => 'Import ZIP failed to validate with errors:',
+    'import_zip_failed_notification' => 'Failed to import ZIP file.',
+    'import_perms_books' => 'You are lacking the required permissions to create books.',
+    'import_perms_chapters' => 'You are lacking the required permissions to create chapters.',
+    'import_perms_pages' => 'You are lacking the required permissions to create pages.',
+    'import_perms_images' => 'You are lacking the required permissions to create images.',
+    'import_perms_attachments' => 'You are lacking the required permission to create attachments.',
 
     // API errors
     'api_no_authorization_found' => 'Nie znaleziono tokenu autoryzacji dla żądania',

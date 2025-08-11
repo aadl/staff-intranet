@@ -61,6 +61,14 @@ class FileProvider
     }
 
     /**
+     * Get raw data for a Jpeg image test file.
+     */
+    public function jpegImageData(): string
+    {
+        return file_get_contents($this->testFilePath('test-image.jpg'));
+    }
+
+    /**
      * Get the expected relative path for an uploaded image of the given type and filename.
      */
     public function expectedImagePath(string $imageType, string $fileName): string
@@ -133,10 +141,19 @@ class FileProvider
      */
     public function deleteAtRelativePath(string $path): void
     {
-        $fullPath = public_path($path);
+        $fullPath = $this->relativeToFullPath($path);
         if (file_exists($fullPath)) {
             unlink($fullPath);
         }
+    }
+
+    /**
+     * Convert a relative path used by default in this provider to a full
+     * absolute local filesystem path.
+     */
+    public function relativeToFullPath(string $path): string
+    {
+        return public_path($path);
     }
 
     /**
@@ -149,5 +166,13 @@ class FileProvider
         foreach (Attachment::all() as $file) {
             $fileService->deleteFile($file);
         }
+    }
+
+    /**
+     * Reset the application favicon image in the public path.
+     */
+    public function resetAppFavicon(): void
+    {
+        file_put_contents(public_path('favicon.ico'), file_get_contents(public_path('icon.ico')));
     }
 }

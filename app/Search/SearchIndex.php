@@ -6,7 +6,7 @@ use BookStack\Activity\Models\Tag;
 use BookStack\Entities\EntityProvider;
 use BookStack\Entities\Models\Entity;
 use BookStack\Entities\Models\Page;
-use DOMDocument;
+use BookStack\Util\HtmlDocument;
 use DOMNode;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
@@ -16,7 +16,13 @@ class SearchIndex
     /**
      * A list of delimiter characters used to break-up parsed content into terms for indexing.
      */
-    public static string $delimiters = " \n\t.,!?:;()[]{}<>`'\"";
+    public static string $delimiters = " \n\t.-,!?:;()[]{}<>`'\"«»";
+
+    /**
+     * A list of delimiter which could be commonly used within a single term and also indicate a break between terms.
+     * The indexer will index the full term with these delimiters, plus the terms split via these delimiters.
+     */
+    public static string $softDelimiters = ".-";
 
     public function __construct(
         protected EntityProvider $entityProvider
@@ -30,7 +36,7 @@ class SearchIndex
     {
         $this->deleteEntityTerms($entity);
         $terms = $this->entityToTermDataArray($entity);
-        SearchTerm::query()->insert($terms);
+        $this->insertTerms($terms);
     }
 
     /**
@@ -46,10 +52,7 @@ class SearchIndex
             array_push($terms, ...$entityTerms);
         }
 
-        $chunkedTerms = array_chunk($terms, 500);
-        foreach ($chunkedTerms as $termChunk) {
-            SearchTerm::query()->insert($termChunk);
-        }
+        $this->insertTerms($terms);
     }
 
     /**
@@ -100,6 +103,19 @@ class SearchIndex
     }
 
     /**
+     * Insert the given terms into the database.
+     * Chunks through the given terms to remain within database limits.
+     * @param array[] $terms
+     */
+    protected function insertTerms(array $terms): void
+    {
+        $chunkedTerms = array_chunk($terms, 500);
+        foreach ($chunkedTerms as $termChunk) {
+            SearchTerm::query()->insert($termChunk);
+        }
+    }
+
+    /**
      * Create a scored term array from the given text, where the keys are the terms
      * and the values are their scores.
      *
@@ -138,18 +154,15 @@ class SearchIndex
             'h6' => 1.5,
         ];
 
-        $html = '<?xml encoding="utf-8" ?><body>' . $html . '</body>';
         $html = str_ireplace(['<br>', '<br />', '<br/>'], "\n", $html);
+        $doc = new HtmlDocument($html);
 
-        libxml_use_internal_errors(true);
-        $doc = new DOMDocument();
-        $doc->loadHTML($html);
-
-        $topElems = $doc->documentElement->childNodes->item(0)->childNodes;
         /** @var DOMNode $child */
-        foreach ($topElems as $child) {
+        foreach ($doc->getBodyChildren() as $child) {
             $nodeName = $child->nodeName;
-            $termCounts = $this->textToTermCountMap(trim($child->textContent));
+            $text = trim($child->textContent);
+            $text = str_replace("\u{00A0}", ' ', $text);
+            $termCounts = $this->textToTermCountMap($text);
             foreach ($termCounts as $term => $count) {
                 $scoreChange = $count * ($elementScoreAdjustmentMap[$nodeName] ?? 1);
                 $scoresByTerm[$term] = ($scoresByTerm[$term] ?? 0) + $scoreChange;
@@ -168,7 +181,6 @@ class SearchIndex
      */
     protected function generateTermScoreMapFromTags(array $tags): array
     {
-        $scoreMap = [];
         $names = [];
         $values = [];
 
@@ -192,15 +204,36 @@ class SearchIndex
     protected function textToTermCountMap(string $text): array
     {
         $tokenMap = []; // {TextToken => OccurrenceCount}
-        $splitChars = static::$delimiters;
-        $token = strtok($text, $splitChars);
+        $softDelims = static::$softDelimiters;
+        $tokenizer = new SearchTextTokenizer($text, static::$delimiters);
+        $extendedToken = '';
+        $extendedLen = 0;
+
+        $token = $tokenizer->next();
 
         while ($token !== false) {
-            if (!isset($tokenMap[$token])) {
-                $tokenMap[$token] = 0;
+            $delim = $tokenizer->previousDelimiter();
+
+            if ($delim && str_contains($softDelims, $delim) && $token !== '') {
+                $extendedToken .= $delim . $token;
+                $extendedLen++;
+            } else {
+                if ($extendedLen > 1) {
+                    $tokenMap[$extendedToken] = ($tokenMap[$extendedToken] ?? 0) + 1;
+                }
+                $extendedToken = $token;
+                $extendedLen = 1;
             }
-            $tokenMap[$token]++;
-            $token = strtok($splitChars);
+
+            if ($token) {
+                $tokenMap[$token] = ($tokenMap[$token] ?? 0) + 1;
+            }
+
+            $token = $tokenizer->next();
+        }
+
+        if ($extendedLen > 1) {
+            $tokenMap[$extendedToken] = ($tokenMap[$extendedToken] ?? 0) + 1;
         }
 
         return $tokenMap;

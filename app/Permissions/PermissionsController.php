@@ -2,31 +2,28 @@
 
 namespace BookStack\Permissions;
 
-use BookStack\Entities\Models\Book;
-use BookStack\Entities\Models\Bookshelf;
-use BookStack\Entities\Models\Chapter;
-use BookStack\Entities\Models\Page;
+use BookStack\Entities\Queries\EntityQueries;
 use BookStack\Entities\Tools\PermissionsUpdater;
 use BookStack\Http\Controller;
 use BookStack\Permissions\Models\EntityPermission;
 use BookStack\Users\Models\Role;
+use BookStack\Util\DatabaseTransaction;
 use Illuminate\Http\Request;
 
 class PermissionsController extends Controller
 {
-    protected PermissionsUpdater $permissionsUpdater;
-
-    public function __construct(PermissionsUpdater $permissionsUpdater)
-    {
-        $this->permissionsUpdater = $permissionsUpdater;
+    public function __construct(
+        protected PermissionsUpdater $permissionsUpdater,
+        protected EntityQueries $queries,
+    ) {
     }
 
     /**
-     * Show the Permissions view for a page.
+     * Show the permissions view for a page.
      */
     public function showForPage(string $bookSlug, string $pageSlug)
     {
-        $page = Page::getBySlugs($bookSlug, $pageSlug);
+        $page = $this->queries->pages->findVisibleBySlugsOrFail($bookSlug, $pageSlug);
         $this->checkOwnablePermission('restrictions-manage', $page);
 
         $this->setPageTitle(trans('entities.pages_permissions'));
@@ -41,10 +38,12 @@ class PermissionsController extends Controller
      */
     public function updateForPage(Request $request, string $bookSlug, string $pageSlug)
     {
-        $page = Page::getBySlugs($bookSlug, $pageSlug);
+        $page = $this->queries->pages->findVisibleBySlugsOrFail($bookSlug, $pageSlug);
         $this->checkOwnablePermission('restrictions-manage', $page);
 
-        $this->permissionsUpdater->updateFromPermissionsForm($page, $request);
+        (new DatabaseTransaction(function () use ($page, $request) {
+            $this->permissionsUpdater->updateFromPermissionsForm($page, $request);
+        }))->run();
 
         $this->showSuccessNotification(trans('entities.pages_permissions_success'));
 
@@ -52,11 +51,11 @@ class PermissionsController extends Controller
     }
 
     /**
-     * Show the Restrictions view for a chapter.
+     * Show the permissions view for a chapter.
      */
     public function showForChapter(string $bookSlug, string $chapterSlug)
     {
-        $chapter = Chapter::getBySlugs($bookSlug, $chapterSlug);
+        $chapter = $this->queries->chapters->findVisibleBySlugsOrFail($bookSlug, $chapterSlug);
         $this->checkOwnablePermission('restrictions-manage', $chapter);
 
         $this->setPageTitle(trans('entities.chapters_permissions'));
@@ -67,14 +66,16 @@ class PermissionsController extends Controller
     }
 
     /**
-     * Set the restrictions for a chapter.
+     * Set the permissions for a chapter.
      */
     public function updateForChapter(Request $request, string $bookSlug, string $chapterSlug)
     {
-        $chapter = Chapter::getBySlugs($bookSlug, $chapterSlug);
+        $chapter = $this->queries->chapters->findVisibleBySlugsOrFail($bookSlug, $chapterSlug);
         $this->checkOwnablePermission('restrictions-manage', $chapter);
 
-        $this->permissionsUpdater->updateFromPermissionsForm($chapter, $request);
+        (new DatabaseTransaction(function () use ($chapter, $request) {
+            $this->permissionsUpdater->updateFromPermissionsForm($chapter, $request);
+        }))->run();
 
         $this->showSuccessNotification(trans('entities.chapters_permissions_success'));
 
@@ -86,7 +87,7 @@ class PermissionsController extends Controller
      */
     public function showForBook(string $slug)
     {
-        $book = Book::getBySlug($slug);
+        $book = $this->queries->books->findVisibleBySlugOrFail($slug);
         $this->checkOwnablePermission('restrictions-manage', $book);
 
         $this->setPageTitle(trans('entities.books_permissions'));
@@ -97,14 +98,16 @@ class PermissionsController extends Controller
     }
 
     /**
-     * Set the restrictions for a book.
+     * Set the permissions for a book.
      */
     public function updateForBook(Request $request, string $slug)
     {
-        $book = Book::getBySlug($slug);
+        $book = $this->queries->books->findVisibleBySlugOrFail($slug);
         $this->checkOwnablePermission('restrictions-manage', $book);
 
-        $this->permissionsUpdater->updateFromPermissionsForm($book, $request);
+        (new DatabaseTransaction(function () use ($book, $request) {
+            $this->permissionsUpdater->updateFromPermissionsForm($book, $request);
+        }))->run();
 
         $this->showSuccessNotification(trans('entities.books_permissions_updated'));
 
@@ -116,7 +119,7 @@ class PermissionsController extends Controller
      */
     public function showForShelf(string $slug)
     {
-        $shelf = Bookshelf::getBySlug($slug);
+        $shelf = $this->queries->shelves->findVisibleBySlugOrFail($slug);
         $this->checkOwnablePermission('restrictions-manage', $shelf);
 
         $this->setPageTitle(trans('entities.shelves_permissions'));
@@ -131,10 +134,12 @@ class PermissionsController extends Controller
      */
     public function updateForShelf(Request $request, string $slug)
     {
-        $shelf = Bookshelf::getBySlug($slug);
+        $shelf = $this->queries->shelves->findVisibleBySlugOrFail($slug);
         $this->checkOwnablePermission('restrictions-manage', $shelf);
 
-        $this->permissionsUpdater->updateFromPermissionsForm($shelf, $request);
+        (new DatabaseTransaction(function () use ($shelf, $request) {
+            $this->permissionsUpdater->updateFromPermissionsForm($shelf, $request);
+        }))->run();
 
         $this->showSuccessNotification(trans('entities.shelves_permissions_updated'));
 
@@ -146,10 +151,13 @@ class PermissionsController extends Controller
      */
     public function copyShelfPermissionsToBooks(string $slug)
     {
-        $shelf = Bookshelf::getBySlug($slug);
+        $shelf = $this->queries->shelves->findVisibleBySlugOrFail($slug);
         $this->checkOwnablePermission('restrictions-manage', $shelf);
 
-        $updateCount = $this->permissionsUpdater->updateBookPermissionsFromShelf($shelf);
+        $updateCount = (new DatabaseTransaction(function () use ($shelf) {
+            return $this->permissionsUpdater->updateBookPermissionsFromShelf($shelf);
+        }))->run();
+
         $this->showSuccessNotification(trans('entities.shelves_copy_permission_success', ['count' => $updateCount]));
 
         return redirect($shelf->getUrl());

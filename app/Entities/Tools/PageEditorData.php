@@ -4,7 +4,7 @@ namespace BookStack\Entities\Tools;
 
 use BookStack\Activity\Tools\CommentTree;
 use BookStack\Entities\Models\Page;
-use BookStack\Entities\Repos\PageRepo;
+use BookStack\Entities\Queries\EntityQueries;
 use BookStack\Entities\Tools\Markdown\HtmlToMarkdown;
 use BookStack\Entities\Tools\Markdown\MarkdownToHtml;
 
@@ -15,7 +15,7 @@ class PageEditorData
 
     public function __construct(
         protected Page $page,
-        protected PageRepo $pageRepo,
+        protected EntityQueries $queries,
         protected string $requestedEditor
     ) {
         $this->viewData = $this->build();
@@ -35,7 +35,12 @@ class PageEditorData
     {
         $page = clone $this->page;
         $isDraft = boolval($this->page->draft);
-        $templates = $this->pageRepo->getTemplates(10);
+        $templates = $this->queries->pages->visibleTemplates()
+            ->orderBy('name', 'asc')
+            ->take(10)
+            ->paginate()
+            ->withPath('/templates');
+
         $draftsEnabled = auth()->check();
 
         $isDraftRevision = false;
@@ -47,8 +52,8 @@ class PageEditorData
         }
 
         // Check for a current draft version for this user
-        $userDraft = $this->pageRepo->getUserDraft($page);
-        if ($userDraft !== null) {
+        $userDraft = $this->queries->revisions->findLatestCurrentUserDraftsForPageId($page->id);
+        if (!is_null($userDraft)) {
             $page->forceFill($userDraft->only(['name', 'html', 'markdown']));
             $isDraftRevision = true;
             $this->warnings[] = $editActivity->getEditingActiveDraftMessage($userDraft);
@@ -69,17 +74,17 @@ class PageEditorData
         ];
     }
 
-    protected function updateContentForEditor(Page $page, string $editorType): void
+    protected function updateContentForEditor(Page $page, PageEditorType $editorType): void
     {
         $isHtml = !empty($page->html) && empty($page->markdown);
 
         // HTML to markdown-clean conversion
-        if ($editorType === 'markdown' && $isHtml && $this->requestedEditor === 'markdown-clean') {
+        if ($editorType === PageEditorType::Markdown && $isHtml && $this->requestedEditor === 'markdown-clean') {
             $page->markdown = (new HtmlToMarkdown($page->html))->convert();
         }
 
         // Markdown to HTML conversion if we don't have HTML
-        if ($editorType === 'wysiwyg' && !$isHtml) {
+        if ($editorType->isHtmlBased() && !$isHtml) {
             $page->html = (new MarkdownToHtml($page->markdown))->convert();
         }
     }
@@ -89,24 +94,16 @@ class PageEditorData
      * Defaults based upon the current content of the page otherwise will fall back
      * to system default but will take a requested type (if provided) if permissions allow.
      */
-    protected function getEditorType(Page $page): string
+    protected function getEditorType(Page $page): PageEditorType
     {
-        $editorType = $page->editor ?: self::getSystemDefaultEditor();
+        $editorType = PageEditorType::forPage($page) ?: PageEditorType::getSystemDefault();
 
         // Use requested editor if valid and if we have permission
-        $requestedType = explode('-', $this->requestedEditor)[0];
-        if (($requestedType === 'markdown' || $requestedType === 'wysiwyg') && userCan('editor-change')) {
+        $requestedType = PageEditorType::fromRequestValue($this->requestedEditor);
+        if ($requestedType && userCan('editor-change')) {
             $editorType = $requestedType;
         }
 
         return $editorType;
-    }
-
-    /**
-     * Get the configured system default editor.
-     */
-    public static function getSystemDefaultEditor(): string
-    {
-        return setting('app-editor') === 'markdown' ? 'markdown' : 'wysiwyg';
     }
 }

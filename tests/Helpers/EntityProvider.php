@@ -6,6 +6,7 @@ use BookStack\Entities\Models\Book;
 use BookStack\Entities\Models\Bookshelf;
 use BookStack\Entities\Models\Chapter;
 use BookStack\Entities\Models\Entity;
+use BookStack\Entities\Models\HasCoverImage;
 use BookStack\Entities\Models\Page;
 use BookStack\Entities\Repos\BookRepo;
 use BookStack\Entities\Repos\BookshelfRepo;
@@ -51,6 +52,15 @@ class EntityProvider
     public function pageNotWithinChapter(): Page
     {
         return $this->page(fn(Builder $query) => $query->where('chapter_id', '=', 0));
+    }
+
+    public function templatePage(): Page
+    {
+        $page = $this->page();
+        $page->template = true;
+        $page->save();
+
+        return $page;
     }
 
     /**
@@ -196,6 +206,29 @@ class EntityProvider
         $pageRepo->updatePageDraft($draftPage, $input);
         $this->addToCache($draftPage);
         return $draftPage;
+    }
+
+    /**
+     * Send an entity to the recycle bin.
+     */
+    public function sendToRecycleBin(Entity $entity)
+    {
+        $trash = app()->make(TrashCan::class);
+
+        if ($entity instanceof Page) {
+            $trash->softDestroyPage($entity);
+        } elseif ($entity instanceof Chapter) {
+            $trash->softDestroyChapter($entity);
+        } elseif ($entity instanceof Book) {
+            $trash->softDestroyBook($entity);
+        } elseif ($entity instanceof Bookshelf) {
+            $trash->softDestroyBookshelf($entity);
+        }
+
+        $entity->refresh();
+        if (is_null($entity->deleted_at)) {
+            throw new \Exception("Could not send entity type [{$entity->getMorphClass()}] to the recycle bin");
+        }
     }
 
     /**

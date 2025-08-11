@@ -33,31 +33,32 @@ class UserApiController extends ApiController
         });
     }
 
-    protected function rules(int $userId = null): array
+    protected function rules(?int $userId = null): array
     {
         return [
             'create' => [
-                'name'  => ['required', 'min:2', 'max:100'],
+                'name'  => ['required', 'string', 'min:1', 'max:100'],
                 'email' => [
-                    'required', 'min:2', 'email', new Unique('users', 'email'),
+                    'required', 'string', 'email', 'min:2', new Unique('users', 'email'),
                 ],
                 'external_auth_id' => ['string'],
                 'language'         => ['string', 'max:15', 'alpha_dash'],
-                'password'         => [Password::default()],
+                'password'         => ['string', Password::default()],
                 'roles'            => ['array'],
                 'roles.*'          => ['integer'],
                 'send_invite'      => ['boolean'],
             ],
             'update' => [
-                'name'  => ['min:2', 'max:100'],
+                'name'  => ['string', 'min:1', 'max:100'],
                 'email' => [
-                    'min:2',
+                    'string',
                     'email',
-                    (new Unique('users', 'email'))->ignore($userId ?? null),
+                    'min:2',
+                    (new Unique('users', 'email'))->ignore($userId),
                 ],
                 'external_auth_id' => ['string'],
                 'language'         => ['string', 'max:15', 'alpha_dash'],
-                'password'         => [Password::default()],
+                'password'         => ['string', Password::default()],
                 'roles'            => ['array'],
                 'roles.*'          => ['integer'],
             ],
@@ -90,7 +91,7 @@ class UserApiController extends ApiController
     public function create(Request $request)
     {
         $data = $this->validate($request, $this->rules()['create']);
-        $sendInvite = ($data['send_invite'] ?? false) === true;
+        $sendInvite = boolval($data['send_invite'] ?? false) === true;
 
         $user = null;
         DB::transaction(function () use ($data, $sendInvite, &$user) {

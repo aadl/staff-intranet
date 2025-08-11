@@ -6,7 +6,7 @@ return [
 
     // Buttons
     'cancel' => 'Скасувати',
-    'close' => 'Close',
+    'close' => 'Закрити',
     'confirm' => 'Застосувати',
     'back' => 'Назад',
     'save' => 'Зберегти',
@@ -20,7 +20,7 @@ return [
     'description' => 'Опис',
     'role' => 'Роль',
     'cover_image' => 'Обкладинка',
-    'cover_image_description' => 'Це зображення має бути приблизно 440x250px.',
+    'cover_image_description' => 'Це зображення має бути приблизно 440х250пікс, щоб його було легко масштабувати та обводити відповідно до інтерфейсу користувача у різних сценаріях, як це необхідно, тому реальні розміри для відображення відрізняються.',
 
     // Actions
     'actions' => 'Дії',
@@ -30,6 +30,8 @@ return [
     'create' => 'Створити',
     'update' => 'Оновити',
     'edit' => 'Редагувати',
+    'archive' => 'Archive',
+    'unarchive' => 'Un-Archive',
     'sort' => 'Сортувати',
     'move' => 'Перемістити',
     'copy' => 'Копіювати',
@@ -42,7 +44,7 @@ return [
     'remove' => 'Видалити',
     'add' => 'Додати',
     'configure' => 'Налаштувати',
-    'manage' => 'Manage',
+    'manage' => 'Управління',
     'fullscreen' => 'На весь екран',
     'favourite' => 'Улюблене',
     'unfavourite' => 'Прибрати з обраного',
@@ -52,6 +54,7 @@ return [
     'filter_clear' => 'Очистити фільтр',
     'download' => 'Завантажити',
     'open_in_tab' => 'Відкрити в новій вкладці',
+    'open' => 'Відкрити',
 
     // Sort Options
     'sort_options' => 'Параметри сортування',
@@ -106,4 +109,7 @@ return [
     // Not directly used but available for convenience to users.
     'privacy_policy' => 'Політика приватності',
     'terms_of_service' => 'Умови використання',
+
+    // OpenSearch
+    'opensearch_description' => 'Шукати :appName',
 ];

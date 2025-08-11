@@ -10,6 +10,7 @@ return [
 
     // Auth
     'error_user_exists_different_creds' => 'Naudotojo elektroninis paštas :email jau egzistuoja, bet su kitokiais įgaliojimais.',
+    'auth_pre_register_theme_prevention' => 'User account could not be registered for the provided details',
     'email_already_confirmed' => 'Elektroninis paštas jau buvo patvirtintas, pabandykite prisijungti.',
     'email_confirmation_invalid' => 'Šis patvirtinimo prieigos raktas negalioja arba jau buvo panaudotas, prašome bandykite vėl registruotis.',
     'email_confirmation_expired' => 'Šis patvirtinimo prieigos raktas baigė galioti, naujas patvirtinimo laiškas jau išsiųstas elektroniniu paštu.',
@@ -19,12 +20,10 @@ return [
     'ldap_extension_not_installed' => 'LDAP PHP išplėtimas neįdiegtas',
     'ldap_cannot_connect' => 'Negalima prisijungti prie LDAP serverio, nepavyko prisijungti',
     'saml_already_logged_in' => 'Jau prisijungta',
-    'saml_user_not_registered' => 'Naudotojas :name neužregistruotas ir automatinė registracija yra išjungta',
     'saml_no_email_address' => 'Nerandamas šio naudotojo elektroninio pašto adresas išorinės autentifikavimo sistemos pateiktuose duomenyse',
     'saml_invalid_response_id' => 'Prašymas iš išorinės autentifikavimo sistemos nėra atpažintas proceso, kurį pradėjo ši programa. Naršymas po prisijungimo gali sukelti šią problemą.',
     'saml_fail_authed' => 'Prisijungimas, naudojant :system nepavyko, sistema nepateikė sėkmingo leidimo.',
     'oidc_already_logged_in' => 'Already logged in',
-    'oidc_user_not_registered' => 'The user :name is not registered and automatic registration is disabled',
     'oidc_no_email_address' => 'Could not find an email address, for this user, in the data provided by the external authentication system',
     'oidc_fail_authed' => 'Login using :system failed, system did not provide successful authorization',
     'social_no_action_defined' => 'Neapibrėžtas joks veiksmas',
@@ -38,18 +37,23 @@ return [
     'social_driver_not_found' => 'Socialinis diskas nerastas',
     'social_driver_not_configured' => 'Jūsų :socialAccount socaliniai nustatymai sukonfigūruoti neteisingai.',
     'invite_token_expired' => 'Ši kvietimo nuoroda baigė galioti. Vietoj to, jūs galite bandyti iš naujo nustatyti savo paskyros slaptažodį.',
+    'login_user_not_found' => 'A user for this action could not be found.',
 
     // System
     'path_not_writable' => 'Į failo kelią :filePath negalima įkelti. Įsitikinkite, kad jis yra įrašomas į serverį.',
     'cannot_get_image_from_url' => 'Negalima gauti vaizdo iš :url',
     'cannot_create_thumbs' => 'Serveris negali sukurti miniatiūros. Prašome patikrinkite, ar turite įdiegtą GD PHP plėtinį.',
     'server_upload_limit' => 'Serveris neleidžia įkelti tokio dydžio failų. Prašome bandykite mažesnį failo dydį.',
+    'server_post_limit' => 'The server cannot receive the provided amount of data. Try again with less data or a smaller file.',
     'uploaded'  => 'Serveris neleidžia įkelti tokio dydžio failų. Prašome bandykite mažesnį failo dydį.',
 
     // Drawing & Images
     'image_upload_error' => 'Įvyko klaida įkeliant vaizdą',
     'image_upload_type_error' => 'Vaizdo tipas, kurį norima įkelti, yra neteisingas',
     'image_upload_replace_type' => 'Image file replacements must be of the same type',
+    'image_upload_memory_limit' => 'Failed to handle image upload and/or create thumbnails due to system resource limits.',
+    'image_thumbnail_memory_limit' => 'Failed to create image size variations due to system resource limits.',
+    'image_gallery_thumbnail_memory_limit' => 'Failed to create gallery thumbnails due to system resource limits.',
     'drawing_data_not_found' => 'Drawing data could not be loaded. The drawing file might no longer exist or you may not have permission to access it.',
 
     // Attachments
@@ -74,6 +78,7 @@ return [
     // Users
     'users_cannot_delete_only_admin' => 'Negalite ištrinti vienintelio administratoriaus',
     'users_cannot_delete_guest' => 'Negalite ištrinti svečio naudotojo',
+    'users_could_not_send_invite' => 'Could not create user since invite email failed to send',
 
     // Roles
     'role_cannot_be_edited' => 'Šio vaidmens negalima redaguoti',
@@ -99,6 +104,18 @@ return [
     'error_occurred' => 'Įvyko klaida',
     'app_down' => ':appName dabar yra apačioje',
     'back_soon' => 'Tai sugrįž greitai',
+
+    // Import
+    'import_zip_cant_read' => 'Could not read ZIP file.',
+    'import_zip_cant_decode_data' => 'Could not find and decode ZIP data.json content.',
+    'import_zip_no_data' => 'ZIP file data has no expected book, chapter or page content.',
+    'import_validation_failed' => 'Import ZIP failed to validate with errors:',
+    'import_zip_failed_notification' => 'Failed to import ZIP file.',
+    'import_perms_books' => 'You are lacking the required permissions to create books.',
+    'import_perms_chapters' => 'You are lacking the required permissions to create chapters.',
+    'import_perms_pages' => 'You are lacking the required permissions to create pages.',
+    'import_perms_images' => 'You are lacking the required permissions to create images.',
+    'import_perms_attachments' => 'You are lacking the required permission to create attachments.',
 
     // API errors
     'api_no_authorization_found' => 'Užklausoje nerastas įgaliojimo prieigos raktas',

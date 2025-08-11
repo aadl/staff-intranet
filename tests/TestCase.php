@@ -3,13 +3,10 @@
 namespace Tests;
 
 use BookStack\Entities\Models\Entity;
+use BookStack\Http\HttpClientHistory;
+use BookStack\Http\HttpRequestService;
 use BookStack\Settings\SettingService;
-use BookStack\Uploads\HttpFetcher;
 use BookStack\Users\Models\User;
-use GuzzleHttp\Client;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Middleware;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
@@ -18,10 +15,8 @@ use Illuminate\Support\Env;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Testing\Assert as PHPUnit;
-use Mockery;
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
-use Psr\Http\Client\ClientInterface;
 use Ssddanbrown\AssertHtml\TestsHtml;
 use Tests\Helpers\EntityProvider;
 use Tests\Helpers\FileProvider;
@@ -47,7 +42,6 @@ abstract class TestCase extends BaseTestCase
         $this->permissions = new PermissionsProvider($this->users);
         $this->files = new FileProvider();
 
-        User::clearDefault();
         parent::setUp();
 
         // We can uncomment the below to run tests with failings upon deprecations.
@@ -111,33 +105,11 @@ abstract class TestCase extends BaseTestCase
     }
 
     /**
-     * Mock the HttpFetcher service and return the given data on fetch.
+     * Mock the http client used in BookStack http calls.
      */
-    protected function mockHttpFetch($returnData, int $times = 1)
+    protected function mockHttpClient(array $responses = []): HttpClientHistory
     {
-        $mockHttp = Mockery::mock(HttpFetcher::class);
-        $this->app[HttpFetcher::class] = $mockHttp;
-        $mockHttp->shouldReceive('fetch')
-            ->times($times)
-            ->andReturn($returnData);
-    }
-
-    /**
-     * Mock the http client used in BookStack.
-     * Returns a reference to the container which holds all history of http transactions.
-     *
-     * @link https://docs.guzzlephp.org/en/stable/testing.html#history-middleware
-     */
-    protected function &mockHttpClient(array $responses = []): array
-    {
-        $container = [];
-        $history = Middleware::history($container);
-        $mock = new MockHandler($responses);
-        $handlerStack = new HandlerStack($mock);
-        $handlerStack->push($history);
-        $this->app[ClientInterface::class] = new Client(['handler' => $handlerStack]);
-
-        return $container;
+        return $this->app->make(HttpRequestService::class)->mockClient($responses);
     }
 
     /**
@@ -146,32 +118,41 @@ abstract class TestCase extends BaseTestCase
      * Database config is juggled so the value can be restored when
      * parallel testing are used, where multiple databases exist.
      */
-    protected function runWithEnv(string $name, $value, callable $callback)
+    protected function runWithEnv(array $valuesByKey, callable $callback, bool $handleDatabase = true): void
     {
         Env::disablePutenv();
-        $originalVal = $_SERVER[$name] ?? null;
+        $originals = [];
+        foreach ($valuesByKey as $key => $value) {
+            $originals[$key] = $_SERVER[$key] ?? null;
 
-        if (is_null($value)) {
-            unset($_SERVER[$name]);
-        } else {
-            $_SERVER[$name] = $value;
+            if (is_null($value)) {
+                unset($_SERVER[$key]);
+            } else {
+                $_SERVER[$key] = $value;
+            }
         }
 
         $database = config('database.connections.mysql_testing.database');
         $this->refreshApplication();
 
-        DB::purge();
-        config()->set('database.connections.mysql_testing.database', $database);
-        DB::beginTransaction();
+        if ($handleDatabase) {
+            DB::purge();
+            config()->set('database.connections.mysql_testing.database', $database);
+            DB::beginTransaction();
+        }
 
         $callback();
 
-        DB::rollBack();
+        if ($handleDatabase) {
+            DB::rollBack();
+        }
 
-        if (is_null($originalVal)) {
-            unset($_SERVER[$name]);
-        } else {
-            $_SERVER[$name] = $originalVal;
+        foreach ($originals as $key => $value) {
+            if (is_null($value)) {
+                unset($_SERVER[$key]);
+            } else {
+                $_SERVER[$key] = $value;
+            }
         }
     }
 
@@ -276,8 +257,8 @@ abstract class TestCase extends BaseTestCase
         $detailsToCheck = ['type' => $type];
 
         if ($entity) {
-            $detailsToCheck['entity_type'] = $entity->getMorphClass();
-            $detailsToCheck['entity_id'] = $entity->id;
+            $detailsToCheck['loggable_type'] = $entity->getMorphClass();
+            $detailsToCheck['loggable_id'] = $entity->id;
         }
 
         if ($detail) {

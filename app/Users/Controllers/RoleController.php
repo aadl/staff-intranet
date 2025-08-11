@@ -75,7 +75,7 @@ class RoleController extends Controller
         $data = $this->validate($request, [
             'display_name' => ['required', 'min:3', 'max:180'],
             'description'  => ['max:180'],
-            'external_auth_id' => ['string'],
+            'external_auth_id' => ['string', 'max:180'],
             'permissions'  => ['array'],
             'mfa_enforced' => ['string'],
         ]);
@@ -109,7 +109,7 @@ class RoleController extends Controller
         $data = $this->validate($request, [
             'display_name' => ['required', 'min:3', 'max:180'],
             'description'  => ['max:180'],
-            'external_auth_id' => ['string'],
+            'external_auth_id' => ['string', 'max:180'],
             'permissions'  => ['array'],
             'mfa_enforced' => ['string'],
         ]);
@@ -154,7 +154,7 @@ class RoleController extends Controller
         } catch (PermissionsException $e) {
             $this->showErrorNotification($e->getMessage());
 
-            return redirect()->back();
+            return redirect("/settings/roles/delete/{$id}");
         }
 
         return redirect('/settings/roles');

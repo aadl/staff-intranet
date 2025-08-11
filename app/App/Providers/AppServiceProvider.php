@@ -2,23 +2,22 @@
 
 namespace BookStack\App\Providers;
 
-use BookStack\Access\SocialAuthService;
+use BookStack\Access\SocialDriverManager;
 use BookStack\Activity\Tools\ActivityLogger;
 use BookStack\Entities\Models\Book;
 use BookStack\Entities\Models\Bookshelf;
 use BookStack\Entities\Models\Chapter;
 use BookStack\Entities\Models\Page;
 use BookStack\Exceptions\BookStackExceptionHandlerPage;
+use BookStack\Http\HttpRequestService;
 use BookStack\Permissions\PermissionApplicator;
 use BookStack\Settings\SettingService;
 use BookStack\Util\CspService;
-use GuzzleHttp\Client;
 use Illuminate\Contracts\Foundation\ExceptionRenderer;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
-use Psr\Http\Client\ClientInterface as HttpClientInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
      * Custom container bindings to register.
      * @var string[]
      */
-    public $bindings = [
+    public array $bindings = [
         ExceptionRenderer::class => BookStackExceptionHandlerPage::class,
     ];
 
@@ -34,24 +33,33 @@ class AppServiceProvider extends ServiceProvider
      * Custom singleton bindings to register.
      * @var string[]
      */
-    public $singletons = [
+    public array $singletons = [
         'activity' => ActivityLogger::class,
         SettingService::class => SettingService::class,
-        SocialAuthService::class => SocialAuthService::class,
+        SocialDriverManager::class => SocialDriverManager::class,
         CspService::class => CspService::class,
+        HttpRequestService::class => HttpRequestService::class,
     ];
 
     /**
-     * Bootstrap any application services.
-     *
-     * @return void
+     * Register any application services.
      */
-    public function boot()
+    public function register(): void
+    {
+        $this->app->singleton(PermissionApplicator::class, function ($app) {
+            return new PermissionApplicator(null);
+        });
+    }
+
+    /**
+     * Bootstrap any application services.
+     */
+    public function boot(): void
     {
         // Set root URL
         $appUrl = config('app.url');
         if ($appUrl) {
-            $isHttps = (strpos($appUrl, 'https://') === 0);
+            $isHttps = str_starts_with($appUrl, 'https://');
             URL::forceRootUrl($appUrl);
             URL::forceScheme($isHttps ? 'https' : 'http');
         }
@@ -66,23 +74,5 @@ class AppServiceProvider extends ServiceProvider
             'chapter'   => Chapter::class,
             'page'      => Page::class,
         ]);
-    }
-
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        $this->app->bind(HttpClientInterface::class, function ($app) {
-            return new Client([
-                'timeout' => 3,
-            ]);
-        });
-
-        $this->app->singleton(PermissionApplicator::class, function ($app) {
-            return new PermissionApplicator(null);
-        });
     }
 }
