@@ -17,7 +17,6 @@
         "ext-mbstring": "*",
         "ext-xml": "*",
         "ext-zip": "*",
-        "aadl/safety": "dev-main@dev",
         "bacon/bacon-qr-code": "^3.0",
         "dompdf/dompdf": "^3.1",
         "guzzlehttp/guzzle": "^7.4",
