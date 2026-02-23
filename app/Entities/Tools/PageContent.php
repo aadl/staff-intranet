@@ -2,16 +2,19 @@
 
 namespace BookStack\Entities\Tools;
 
+use BookStack\App\AppVersion;
 use BookStack\Entities\Models\Page;
 use BookStack\Entities\Queries\PageQueries;
 use BookStack\Entities\Tools\Markdown\MarkdownToHtml;
 use BookStack\Exceptions\ImageUploadException;
 use BookStack\Facades\Theme;
+use BookStack\Permissions\Permission;
 use BookStack\Theming\ThemeEvents;
 use BookStack\Uploads\ImageRepo;
 use BookStack\Uploads\ImageService;
 use BookStack\Users\Models\User;
 use BookStack\Util\HtmlContentFilter;
+use BookStack\Util\HtmlContentFilterConfig;
 use BookStack\Util\HtmlDocument;
 use BookStack\Util\WebSafeMimeSniffer;
 use Closure;
@@ -122,7 +125,7 @@ class PageContent
         $imageInfo = $this->parseBase64ImageUri($uri);
 
         // Validate user has permission to create images
-        if (!$updater->can('image-create-all')) {
+        if (!$updater->can(Permission::ImageCreateAll)) {
             return '';
         }
 
@@ -283,7 +286,7 @@ class PageContent
     /**
      * Get a plain-text visualisation of this page.
      */
-    protected function toPlainText(): string
+    public function toPlainText(): string
     {
         $html = $this->render(true);
 
@@ -316,11 +319,30 @@ class PageContent
             $this->updateIdsRecursively($doc->getBody(), 0, $idMap, $changeMap);
         }
 
-        if (!config('app.allow_content_scripts')) {
-            HtmlContentFilter::removeScriptsFromDocument($doc);
+        $cacheKey = $this->getContentCacheKey($doc->getBodyInnerHtml());
+        $cached = cache()->get($cacheKey, null);
+        if ($cached !== null) {
+            return $cached;
         }
 
-        return $doc->getBodyInnerHtml();
+        $filterConfig = HtmlContentFilterConfig::fromConfigString(config('app.content_filtering'));
+        $filter = new HtmlContentFilter($filterConfig);
+        $filtered = $filter->filterDocument($doc);
+
+        $cacheTime = 86400 * 7; // 1 week
+        cache()->put($cacheKey, $filtered, $cacheTime);
+
+        return $filtered;
+    }
+
+    protected function getContentCacheKey(string $html): string
+    {
+        $contentHash = md5($html);
+        $contentId = $this->page->id;
+        $contentTime = $this->page->updated_at?->timestamp ?? time();
+        $appVersion = AppVersion::get();
+        $filterConfig = config('app.content_filtering') ?? '';
+        return "page-content-cache::{$filterConfig}::{$appVersion}::{$contentId}::{$contentTime}::{$contentHash}";
     }
 
     /**
