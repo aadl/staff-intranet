@@ -46,7 +46,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int|null   $created_by
  * @property int|null   $updated_by
  * @property int|null   $owned_by
- * @property Collection $tags
+ * @property Collection<int, Tag> $tags
  *
  * @method static Entity|Builder visible()
  * @method static Builder withLastView()
@@ -479,6 +479,7 @@ abstract class Entity extends Model implements
             'chapter' => new Chapter(),
             'book' => new Book(),
             'bookshelf' => new Bookshelf(),
+            default => throw new \InvalidArgumentException("Invalid entity type: {$type}"),
         };
     }
 }

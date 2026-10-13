@@ -2,9 +2,11 @@
 
 namespace BookStack\Uploads\Controllers;
 
+use BookStack\Entities\Queries\PageQueries;
 use BookStack\Exceptions\ImageUploadException;
 use BookStack\Http\Controller;
 use BookStack\Permissions\Permission;
+use BookStack\Uploads\Base64UriMimeRule;
 use BookStack\Uploads\ImageRepo;
 use BookStack\Uploads\ImageResizer;
 use BookStack\Util\OutOfMemoryHandler;
@@ -14,7 +16,8 @@ use Illuminate\Http\Request;
 class DrawioImageController extends Controller
 {
     public function __construct(
-        protected ImageRepo $imageRepo
+        protected ImageRepo $imageRepo,
+        protected PageQueries $pageQueries,
     ) {
     }
 
@@ -24,10 +27,10 @@ class DrawioImageController extends Controller
      */
     public function list(Request $request, ImageResizer $resizer)
     {
-        $page = $request->get('page', 1);
-        $searchTerm = $request->get('search', null);
-        $uploadedToFilter = $request->get('uploaded_to', null);
-        $parentTypeFilter = $request->get('filter_type', null);
+        $page = $request->input('page', 1);
+        $searchTerm = $request->input('search', null);
+        $uploadedToFilter = $request->input('uploaded_to', null);
+        $parentTypeFilter = $request->input('filter_type', null);
 
         $imgData = $this->imageRepo->getEntityFiltered('drawio', $parentTypeFilter, $page, 24, $uploadedToFilter, $searchTerm);
         $viewData = [
@@ -53,16 +56,18 @@ class DrawioImageController extends Controller
      */
     public function create(Request $request)
     {
-        $this->validate($request, [
-            'image'       => ['required', 'string'],
+        $this->checkPermission(Permission::ImageCreateAll);
+        $validated = $this->validate($request, [
+            'image'       => ['required', 'string', new Base64UriMimeRule('image/png')],
             'uploaded_to' => ['required', 'integer'],
         ]);
 
-        $this->checkPermission(Permission::ImageCreateAll);
-        $imageBase64Data = $request->get('image');
+        $imageBase64Data = $validated['image'];
+        $uploadedTo = $validated['uploaded_to'];
+        $targetPage = $this->pageQueries->findVisibleByIdOrFail($uploadedTo);
+        $this->checkOwnablePermission(Permission::PageUpdate, $targetPage);
 
         try {
-            $uploadedTo = $request->get('uploaded_to', 0);
             $image = $this->imageRepo->saveDrawing($imageBase64Data, $uploadedTo);
         } catch (ImageUploadException $e) {
             return response($e->getMessage(), 500);

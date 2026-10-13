@@ -8,7 +8,7 @@ aws/aws-sdk-php
 License: Apache-2.0
 License File: vendor/aws/aws-sdk-php/LICENSE
 Source: https://github.com/aws/aws-sdk-php.git
-Link: http://aws.amazon.com/sdkforphp
+Link: https://aws.amazon.com/sdk-for-php
 -----------
 bacon/bacon-qr-code
 License: BSD-2-Clause
@@ -109,8 +109,8 @@ firebase/php-jwt
 License: BSD-3-Clause
 License File: vendor/firebase/php-jwt/LICENSE
 Copyright: Copyright (c) 2011, Neuman Vong
-Source: https://github.com/firebase/php-jwt.git
-Link: https://github.com/firebase/php-jwt
+Source: https://github.com/googleapis/php-jwt.git
+Link: https://github.com/googleapis/php-jwt
 -----------
 fruitcake/php-cors
 License: MIT
@@ -123,7 +123,7 @@ Link: https://github.com/fruitcake/php-cors
 graham-campbell/result-type
 License: MIT
 License File: vendor/graham-campbell/result-type/LICENSE
-Copyright: Copyright (c) 2020-2024 Graham Campbell <*****@**********.**.**>
+Copyright: Copyright (c) 2020-2026 Graham Campbell <*****@**********.**.**>
 Source: https://github.com/GrahamCampbell/Result-Type.git
 Link: https://github.com/GrahamCampbell/Result-Type.git
 -----------
@@ -766,13 +766,6 @@ License File: vendor/symfony/var-dumper/LICENSE
 Copyright: Copyright (c) 2014-present Fabien Potencier
 Source: https://github.com/symfony/var-dumper.git
 Link: https://symfony.com
------------
-thecodingmachine/safe
-License: MIT
-License File: vendor/thecodingmachine/safe/LICENSE
-Copyright: Copyright (c) 2018 TheCodingMachine
-Source: https://github.com/thecodingmachine/safe.git
-Link: https://github.com/thecodingmachine/safe.git
 -----------
 tijsverkoyen/css-to-inline-styles
 License: BSD-3-Clause

@@ -36,6 +36,45 @@ class ImageTest extends TestCase
         ]);
     }
 
+    public function test_image_upload_with_page_reference_requires_visibility_and_update_permissions_of_target_page()
+    {
+        $page = $this->entities->page();
+        $editor = $this->users->editor();
+
+        $this->permissions->disableEntityInheritedPermissions($page);
+        $this->actingAs($editor);
+
+        $resp = $this->files->uploadGalleryImage($this, 'test-image.png', $page->id);
+        $resp->assertStatus(404);
+
+        $this->permissions->setEntityPermissionsForRole($page, ['view'], $editor->roles()->first());
+
+        $resp = $this->files->uploadGalleryImage($this, 'test-image.png', $page->id);
+        $this->assertPermissionError($resp);
+
+        $this->permissions->setEntityPermissionsForRole($page, ['view', 'update'], $editor->roles()->first());
+
+        $resp = $this->files->uploadGalleryImage($this, 'test-image.png', $page->id);
+        $resp->assertStatus(200);
+
+        $this->files->deleteAtRelativePath($resp->json('path'));
+    }
+
+    public function test_image_upload_with_page_reference_requires_page_to_exist()
+    {
+        $page = $this->entities->page();
+        $this->entities->destroy($page);
+
+        $editor = $this->users->editor();
+        $this->actingAs($editor);
+
+        $resp = $this->files->uploadGalleryImage($this, 'test-image.png', $page->id);
+        $resp->assertStatus(404);
+
+        $resp = $this->files->uploadGalleryImage($this, 'test-image.png', 0);
+        $resp->assertStatus(404);
+    }
+
     public function test_image_display_thumbnail_generation_does_not_increase_image_size()
     {
         $page = $this->entities->page();
@@ -75,7 +114,7 @@ class ImageTest extends TestCase
 
     public function test_image_display_thumbnail_generation_for_animated_avif_images_uses_original_file()
     {
-        if (! function_exists('imageavif')) {
+        if ((gd_info()['AVIF Support'] ?? false) !== true) {
             $this->markTestSkipped('imageavif() is not available');
         }
 
@@ -780,7 +819,7 @@ class ImageTest extends TestCase
         $pageRepo->update($page, [
             'name'    => $page->name,
             'html'    => $page->html . "<img src=\"{$image->url}\">",
-            'summary' => '',
+            'changelog' => '',
         ]);
 
         // Ensure no images are reported as deletable
@@ -792,7 +831,7 @@ class ImageTest extends TestCase
         $pageRepo->update($page, [
             'name'    => $page->name,
             'html'    => '<p>Hello</p>',
-            'summary' => '',
+            'changelog' => '',
         ]);
 
         // Ensure revision images are picked up okay

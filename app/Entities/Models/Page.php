@@ -23,9 +23,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property bool         $draft
  * @property int          $revision_count
  * @property string       $editor
- * @property Chapter      $chapter
- * @property Collection   $attachments
- * @property Collection   $revisions
+ * @property Chapter|null $chapter
+ * @property Collection<int, Attachment>   $attachments
+ * @property Collection<int, PageRevision>   $revisions
  * @property PageRevision $currentRevision
  */
 class Page extends BookChild

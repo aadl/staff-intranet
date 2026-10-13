@@ -7,6 +7,7 @@ use BookStack\App\Model;
 use BookStack\Exceptions\NotifyException;
 use BookStack\Facades\Activity;
 use BookStack\Permissions\Permission;
+use BookStack\Users\Models\OwnableInterface;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
@@ -62,7 +63,7 @@ abstract class Controller extends BaseController
      */
     protected function checkPermission(string|Permission $permission): void
     {
-        if (!user() || !user()->can($permission)) {
+        if (!user()->can($permission)) {
             $this->showPermissionError();
         }
     }
@@ -80,7 +81,7 @@ abstract class Controller extends BaseController
     /**
      * Check the current user's permissions against an ownable item otherwise throw an exception.
      */
-    protected function checkOwnablePermission(string|Permission $permission, Model $ownable, string $redirectLocation = '/'): void
+    protected function checkOwnablePermission(string|Permission $permission, Model&OwnableInterface $ownable, string $redirectLocation = '/'): void
     {
         if (!userCan($permission, $ownable)) {
             $this->showPermissionError($redirectLocation);
@@ -120,7 +121,7 @@ abstract class Controller extends BaseController
     /**
      * Create and return a new download response factory using the current request.
      */
-    protected function download(): DownloadResponseFactory
+    protected function createDownload(): DownloadResponseFactory
     {
         return new DownloadResponseFactory(request());
     }
@@ -167,14 +168,26 @@ abstract class Controller extends BaseController
 
     /**
      * Redirect to the URL provided in the request as a '_return' parameter.
-     * Will check that the parameter leads to a URL under the root path of the system.
+     * Will check that the parameter leads to a URL under the same origin as the application.
      */
     protected function redirectToRequest(Request $request): RedirectResponse
     {
         $basePath = url('/');
         $returnUrl = $request->input('_return') ?? $basePath;
 
-        if (!str_starts_with($returnUrl, $basePath)) {
+        // Only allow use of _return on requests where we expect CSRF to be active
+        // to prevent it potentially being used as an open redirect
+        $allowedMethods = ['POST', 'PUT', 'PATCH', 'DELETE'];
+        if (!in_array($request->getMethod(), $allowedMethods)) {
+            return redirect($basePath);
+        }
+
+        $intendedUrl = parse_url($returnUrl);
+        $baseUrl = parse_url($basePath);
+        $isSameOrigin = ($intendedUrl['host'] ?? '') === ($baseUrl['host'] ?? '')
+            && ($intendedUrl['scheme'] ?? '') === ($baseUrl['scheme'] ?? '')
+            && ($intendedUrl['port'] ?? 0) === ($baseUrl['port'] ?? 0);
+        if (!$isSameOrigin) {
             return redirect($basePath);
         }
 
