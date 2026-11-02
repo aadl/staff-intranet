@@ -16,7 +16,8 @@
         "ext-mbstring": "*",
         "ext-xml": "*",
         "ext-zip": "*",
-        "aadl/safety": "dev-main@dev",
+        "aadl/bookstack-forms": "^1.0",
+        "aadl/safety": "^1.0",
         "bacon/bacon-qr-code": "^3.0",
         "dompdf/dompdf": "^3.1",
         "ezyang/htmlpurifier": "^4.19",
@@ -111,23 +112,32 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Aadl\\Safety\\SafetyServiceProvider"
+                "Aadl\\Safety\\SafetyServiceProvider",
+                "Aadl\\Forms\\FormsServiceProvider"
             ],
             "aliases": {
-                "Safety": "Aadl\\Safety\\SafetyServiceProvider"
+                "Safety": "Aadl\\Safety\\SafetyServiceProvider",
+                "Aadl-Forms": "Aadl\\Forms\\FormsServiceProvider"
             },
             "dont-discover": []
         }
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
-    "repositories": {
-        "aadl/safety": {
+    "repositories": [
+        {
             "type": "path",
             "url": "packages/aadl/safety",
             "options": {
                 "symlink": true
             }
+        },
+        {
+            "type": "path",
+            "url": "packages/aadl/bookstack-forms",
+            "options": {
+                "symlink": true
+            }
         }
-    }
+    ]
 }
