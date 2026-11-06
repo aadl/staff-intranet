@@ -1,3 +1,6 @@
 [submodule "packages/aadl/safety"]
 	path = packages/aadl/safety
 	url = https://github.com/aadl/safety.git
+[submodule "packages/aadl/bookstack-forms"]
+	path = packages/aadl/bookstack-forms
+	url = https://github.com/aadl/bookstack-forms
