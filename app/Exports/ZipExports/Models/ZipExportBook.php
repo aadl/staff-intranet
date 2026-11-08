@@ -8,7 +8,7 @@ use BookStack\Entities\Models\Page;
 use BookStack\Exports\ZipExports\ZipExportFiles;
 use BookStack\Exports\ZipExports\ZipValidationHelper;
 
-class ZipExportBook extends ZipExportModel
+final class ZipExportBook extends ZipExportModel
 {
     public ?int $id = null;
     public string $name;
@@ -55,10 +55,10 @@ class ZipExportBook extends ZipExportModel
         $instance = new self();
         $instance->id = $model->id;
         $instance->name = $model->name;
-        $instance->description_html = $model->descriptionHtml();
+        $instance->description_html = $model->descriptionInfo()->getHtml();
 
-        if ($model->cover) {
-            $instance->cover = $files->referenceForImage($model->cover);
+        if ($model->coverInfo()->exists()) {
+            $instance->cover = $files->referenceForImage($model->coverInfo()->getImage());
         }
 
         $instance->tags = ZipExportTag::fromModelArray($model->tags()->get()->all());
@@ -87,11 +87,15 @@ class ZipExportBook extends ZipExportModel
             'id'    => ['nullable', 'int', $context->uniqueIdRule('book')],
             'name'  => ['required', 'string', 'min:1'],
             'description_html' => ['nullable', 'string'],
-            'cover' => ['nullable', 'string', $context->fileReferenceRule()],
+            'cover' => ['nullable', 'string', $context->imageFileReferenceRule()],
             'tags' => ['array'],
             'pages' => ['array'],
             'chapters' => ['array'],
         ];
+
+        if (isset($data['cover']) && is_string($data['cover'])) {
+            $context->trackUseOfFile($data['cover']);
+        }
 
         $errors = $context->validateData($data, $rules);
         $errors['tags'] = $context->validateRelations($data['tags'] ?? [], ZipExportTag::class);
@@ -101,9 +105,9 @@ class ZipExportBook extends ZipExportModel
         return $errors;
     }
 
-    public static function fromArray(array $data): self
+    public static function fromArray(array $data): static
     {
-        $model = new self();
+        $model = new static();
 
         $model->id = $data['id'] ?? null;
         $model->name = $data['name'];

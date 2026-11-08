@@ -63,10 +63,10 @@ return [
     'import_delete_desc' => 'سيؤدي هذا إلى حذف مِلَفّ الاستيراد المضغوط ZIP، ولا يمكن التراجع عنه.',
     'import_errors' => 'أخطاء الاستيراد',
     'import_errors_desc' => 'حدثت الأخطاء التالية خلال محاولة الاستيراد:',
-    'breadcrumb_siblings_for_page' => 'Navigate siblings for page',
-    'breadcrumb_siblings_for_chapter' => 'Navigate siblings for chapter',
-    'breadcrumb_siblings_for_book' => 'Navigate siblings for book',
-    'breadcrumb_siblings_for_bookshelf' => 'Navigate siblings for shelf',
+    'breadcrumb_siblings_for_page' => 'تصفح أشقاء هذه الصفحة',
+    'breadcrumb_siblings_for_chapter' => 'تصفح أشقاء هذا الفصل',
+    'breadcrumb_siblings_for_book' => 'تصفح أشقاء هذا الكتاب',
+    'breadcrumb_siblings_for_bookshelf' => 'تصفح أشقاء هذا الرف',
 
     // Permissions and restrictions
     'permissions' => 'الأذونات',
@@ -173,6 +173,7 @@ return [
     'books_sort_desc' => 'نقل الفصول والصفحات داخل الكتاب لإعادة تنظيم محتوياته. يمكن إضافة كتب أخرى مما يسمح بنقل الفصول والصفحات بسهولة بين الكتب. اختياريًا، يمكن تعيين قاعدة فرز تلقائي لفرز محتويات هذا الكتاب تلقائيًا عند حدوث تغييرات.',
     'books_sort_auto_sort' => 'خِيار الفرز التلقائي',
     'books_sort_auto_sort_active' => 'الفرز التلقائي الشَغَّال: :sortName',
+    'books_sort_auto_sort_creation_hint' => 'يمكن إنشاء قواعد خيارات الفرز التلقائي في منطقة إعدادات "القوائم و الترتيب" بواسطة مستخدم لديه الأذونات ذات الصلة.',
     'books_sort_named' => 'فرز كتاب :bookName',
     'books_sort_name' => 'ترتيب حسب الإسم',
     'books_sort_created' => 'ترتيب حسب تاريخ الإنشاء',
@@ -330,6 +331,9 @@ return [
 
     // Editor Sidebar
     'toggle_sidebar' => 'تبديل الشريط الجانبي',
+    'page_contents' => 'محتويات الصفحة',
+    'page_contents_none' => 'لم يتم العثور على عناوين في محتوى الصفحة.',
+    'page_contents_info' => 'تُنشأ قائمة المحتويات من أي تنسيقات عناوين مستخدمة في الصفحة.',
     'page_tags' => 'وسوم الصفحة',
     'chapter_tags' => 'وسوم الفصل',
     'book_tags' => 'وسوم الكتاب',

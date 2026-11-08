@@ -35,13 +35,9 @@ class LdapSessionGuard extends ExternalBaseSessionGuard
     /**
      * Validate a user's credentials.
      *
-     * @param array $credentials
-     *
      * @throws LdapException
-     *
-     * @return bool
      */
-    public function validate(array $credentials = [])
+    public function validate(array $credentials = []): bool
     {
         $userDetails = $this->ldapService->getUserDetails($credentials['username']);
 
@@ -85,6 +81,10 @@ class LdapSessionGuard extends ExternalBaseSessionGuard
             } catch (UserRegistrationException $exception) {
                 throw new LoginAttemptException($exception->getMessage());
             }
+        }
+
+        if (!($user instanceof User)) {
+            throw new LoginAttemptException('Could not find or create a user for LDAP login.');
         }
 
         // Sync LDAP groups if required

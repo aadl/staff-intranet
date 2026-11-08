@@ -173,6 +173,7 @@ return [
     'books_sort_desc' => 'Move chapters and pages within a book to reorganise its contents. Other books can be added which allows easy moving of chapters and pages between books. Optionally an auto sort rule can be set to automatically sort this book\'s contents upon changes.',
     'books_sort_auto_sort' => 'Auto Sort Option',
     'books_sort_auto_sort_active' => 'Auto Sort Active: :sortName',
+    'books_sort_auto_sort_creation_hint' => 'Auto sort option rules can be created in the "Lists & Sorting" settings area by a user with the relevant permissions.',
     'books_sort_named' => 'Rūšiuoti knygą :bookName',
     'books_sort_name' => 'Rūšiuoti pagal vardą',
     'books_sort_created' => 'Rūšiuoti pagal sukūrimo datą',
@@ -330,6 +331,9 @@ return [
 
     // Editor Sidebar
     'toggle_sidebar' => 'Toggle Sidebar',
+    'page_contents' => 'Page Contents',
+    'page_contents_none' => 'No headings were found in the page content.',
+    'page_contents_info' => 'The contents menu is generated from any heading formats used in the page.',
     'page_tags' => 'Puslapio žymos',
     'chapter_tags' => 'Skyriaus žymos',
     'book_tags' => 'Knygos žymos',
@@ -416,7 +420,7 @@ return [
     'comment_jump_to_thread' => 'Jump to thread',
     'comment_delete_confirm' => 'Esate tikri, kad norite ištrinti šį komentarą?',
     'comment_in_reply_to' => 'Atsakydamas į :commentId',
-    'comment_reference' => 'Reference',
+    'comment_reference' => 'Nuoroda',
     'comment_reference_outdated' => '(Outdated)',
     'comment_editor_explain' => 'Here are the comments that have been left on this page. Comments can be added & managed when viewing the saved page.',
 
@@ -446,7 +450,7 @@ return [
     'convert_chapter_confirm' => 'Are you sure you want to convert this chapter?',
 
     // References
-    'references' => 'References',
+    'references' => 'Nuorodos',
     'references_none' => 'There are no tracked references to this item.',
     'references_to_desc' => 'Listed below is all the known content in the system that links to this item.',
 

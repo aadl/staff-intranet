@@ -63,10 +63,10 @@ return [
     'import_delete_desc' => 'Potvrzením odstraníte nahraný ZIP soubor. Tento krok nelze vrátit zpět.',
     'import_errors' => 'Chyby importu',
     'import_errors_desc' => 'Při pokusu o import došlo k následujícím chybám:',
-    'breadcrumb_siblings_for_page' => 'Navigate siblings for page',
-    'breadcrumb_siblings_for_chapter' => 'Navigate siblings for chapter',
-    'breadcrumb_siblings_for_book' => 'Navigate siblings for book',
-    'breadcrumb_siblings_for_bookshelf' => 'Navigate siblings for shelf',
+    'breadcrumb_siblings_for_page' => 'Přejít na jinou stránku',
+    'breadcrumb_siblings_for_chapter' => 'Přejít na jinou kapitolu',
+    'breadcrumb_siblings_for_book' => 'Přejít na jinou knihu',
+    'breadcrumb_siblings_for_bookshelf' => 'Přejít na jinou polici',
 
     // Permissions and restrictions
     'permissions' => 'Oprávnění',
@@ -173,6 +173,7 @@ return [
     'books_sort_desc' => 'Pro přeuspořádání obsahu přesuňte kapitoly a stránky v knize. Mohou být přidány další knihy, které umožní snadný přesun kapitol a stránek mezi knihami. Volitelně lze nastavit pravidlo automatického řazení, aby se při změnách automaticky seřadil obsah této knihy.',
     'books_sort_auto_sort' => 'Možnost automatického řazení',
     'books_sort_auto_sort_active' => 'Aktivní automatické řazení: :sortName',
+    'books_sort_auto_sort_creation_hint' => 'Pravidla řazení mohou být vytvořena v nastavení "Seznamy a řazení" uživatelem s příslušnými oprávněními.',
     'books_sort_named' => 'Seřadit knihu :bookName',
     'books_sort_name' => 'Seřadit podle názvu',
     'books_sort_created' => 'Seřadit podle data vytvoření',
@@ -182,7 +183,7 @@ return [
     'books_sort_show_other' => 'Zobrazit ostatní knihy',
     'books_sort_save' => 'Uložit nové pořadí',
     'books_sort_show_other_desc' => 'Přidejte sem další knihy, abyste je zahrnuli do operace třídění, a umožněte snadnou křížovou reorganizaci.',
-    'books_sort_move_up' => 'Posunout Nahoru',
+    'books_sort_move_up' => 'Posunout nahoru',
     'books_sort_move_down' => 'Posunout dolů',
     'books_sort_move_prev_book' => 'Přesunout se na předchozí knihu',
     'books_sort_move_next_book' => 'Přesunout se na další knihu',
@@ -330,6 +331,9 @@ return [
 
     // Editor Sidebar
     'toggle_sidebar' => 'Skrýt/Zobrazit postranní panel',
+    'page_contents' => 'Obsah stránky',
+    'page_contents_none' => 'Na stránce nejsou žádné nadpisy.',
+    'page_contents_info' => 'Obsah se generuje ze všech použitých nadpisů na stránce.',
     'page_tags' => 'Štítky stránky',
     'chapter_tags' => 'Štítky kapitoly',
     'book_tags' => 'Štítky knihy',

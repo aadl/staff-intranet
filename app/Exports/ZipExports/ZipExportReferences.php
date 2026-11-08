@@ -14,6 +14,7 @@ use BookStack\Exports\ZipExports\Models\ZipExportModel;
 use BookStack\Exports\ZipExports\Models\ZipExportPage;
 use BookStack\Uploads\Attachment;
 use BookStack\Uploads\Image;
+use BookStack\Uploads\ImageService;
 
 class ZipExportReferences
 {
@@ -32,6 +33,7 @@ class ZipExportReferences
 
     public function __construct(
         protected ZipReferenceParser $parser,
+        protected ImageService $imageService,
     ) {
     }
 
@@ -132,10 +134,17 @@ class ZipExportReferences
                 return "[[bsexport:image:{$model->id}]]";
             }
 
-            // Find and include images if in visibility
+            // Get the page which we'll reference this image upon
             $page = $model->getPage();
-            $pageExportModel = $this->pages[$page->id] ?? ($exportModel instanceof ZipExportPage ? $exportModel : null);
-            if (isset($this->images[$model->id]) || ($page && $pageExportModel && userCan('view', $page))) {
+            $pageExportModel = null;
+            if ($page && isset($this->pages[$page->id])) {
+                $pageExportModel = $this->pages[$page->id];
+            } elseif ($exportModel instanceof ZipExportPage) {
+                $pageExportModel = $exportModel;
+            }
+
+            // Add the image to the export if it's accessible or just return the existing reference if already added
+            if (isset($this->images[$model->id]) || ($pageExportModel && $this->imageService->imageAccessible($model))) {
                 if (!isset($this->images[$model->id])) {
                     $exportImage = ZipExportImage::fromModel($model, $files);
                     $this->images[$model->id] = $exportImage;
@@ -143,6 +152,7 @@ class ZipExportReferences
                 }
                 return "[[bsexport:image:{$model->id}]]";
             }
+
             return null;
         }
 

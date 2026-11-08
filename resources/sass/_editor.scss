@@ -437,6 +437,23 @@ body.editor-is-fullscreen {
 .editor-node-resizer.active .editor-node-resizer-ghost {
   display: block;
 }
+.editor-content-area details[contenteditable="false"],
+.editor-content-area summary[contenteditable="false"] {
+  user-select: none;
+}
+.editor-content-area details[contenteditable="false"] > details * {
+  pointer-events: none;
+}
+.editor-content-area details summary {
+  caret-color: transparent;
+}
+.editor-content-area details.selected {
+  outline: 1px dashed var(--editor-color-primary);
+  outline-offset: 1px;
+}
+.editor-content-area  [drawio-diagram] {
+  cursor: pointer;
+}
 
 .editor-table-marker {
   position: fixed;
@@ -444,6 +461,7 @@ body.editor-is-fullscreen {
   z-index: 3;
   user-select: none;
   opacity: 0;
+  transition: opacity 120ms ease-in-out;
   &:hover, &.active {
     opacity: 0.4;
   }
@@ -522,7 +540,7 @@ body.editor-is-fullscreen {
 /**
  * Form elements
  */
-$inputWidth: 260px;
+$inputWidth: 400px;
 
 .editor-form-field-wrapper {
   margin-bottom: .5rem;
@@ -663,6 +681,10 @@ textarea.editor-form-field-input {
   align-items: end;
   justify-content: space-between;
   gap: .1rem;
+  > div:has(input) {
+    flex: 1;
+    min-width: 100px;
+  }
   .editor-button {
     margin-bottom: 12px;
   }

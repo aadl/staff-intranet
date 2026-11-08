@@ -63,10 +63,10 @@ return [
     'import_delete_desc' => 'See kustutab üleslaaditud ZIP-faili, ja seda ei saa tagasi võtta.',
     'import_errors' => 'Importimise vead',
     'import_errors_desc' => 'Importimisel esinesid järgmised vead:',
-    'breadcrumb_siblings_for_page' => 'Navigate siblings for page',
-    'breadcrumb_siblings_for_chapter' => 'Navigate siblings for chapter',
-    'breadcrumb_siblings_for_book' => 'Navigate siblings for book',
-    'breadcrumb_siblings_for_bookshelf' => 'Navigate siblings for shelf',
+    'breadcrumb_siblings_for_page' => 'Sirvi teisi lehti',
+    'breadcrumb_siblings_for_chapter' => 'Sirvi teisi peatükke',
+    'breadcrumb_siblings_for_book' => 'Sirvi teisi raamatuid',
+    'breadcrumb_siblings_for_bookshelf' => 'Sirvi teisi riiuleid',
 
     // Permissions and restrictions
     'permissions' => 'Õigused',
@@ -173,6 +173,7 @@ return [
     'books_sort_desc' => 'Liiguta raamatu sees peatükke ja lehti, et selle sisu ümber organiseerida. Saad lisada teisi raamatuid, mis võimaldab peatükke ja lehti lihtsasti raamatute vahel liigutada. Lisaks saad määrata automaatse sorteerimise reegli, et selle raamatu sisu muudatuste puhul automaatselt järjestada.',
     'books_sort_auto_sort' => 'Automaatne sorteerimine',
     'books_sort_auto_sort_active' => 'Automaatne sorteerimine aktiivne: :sortName',
+    'books_sort_auto_sort_creation_hint' => 'Automaatse sorteerimise reegleid saab lisada vajalike õigustega kasutaja "Loendid ja järjestamine" seadetes.',
     'books_sort_named' => 'Sorteeri raamat :bookName',
     'books_sort_name' => 'Sorteeri nime järgi',
     'books_sort_created' => 'Sorteeri loomisaja järgi',
@@ -330,6 +331,9 @@ return [
 
     // Editor Sidebar
     'toggle_sidebar' => 'Kuva/peida külgriba',
+    'page_contents' => 'Lehe sisu',
+    'page_contents_none' => 'Lehe sisus ei leitud ühtegi pealkirja.',
+    'page_contents_info' => 'Sisukord genereeritakse automaatselt lehel kasutatud pealkirjavormingutest.',
     'page_tags' => 'Lehe sildid',
     'chapter_tags' => 'Peatüki sildid',
     'book_tags' => 'Raamatu sildid',

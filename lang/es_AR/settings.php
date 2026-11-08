@@ -75,8 +75,8 @@ return [
     'reg_confirm_restrict_domain_placeholder' => 'Ninguna restricción establecida',
 
     // Sorting Settings
-    'sorting' => 'Ordenando',
-    'sorting_book_default' => 'Orden predeterminado del libro',
+    'sorting' => 'Listas y ordenación',
+    'sorting_book_default' => 'Orden de libros por defecto',
     'sorting_book_default_desc' => 'Seleccione la regla de ordenación predeterminada para aplicar a nuevos libros. Esto no afectará a los libros existentes, y puede ser anulado por libro.',
     'sorting_rules' => 'Reglas de Ordenación',
     'sorting_rules_desc' => 'Son operaciones de ordenación predefinidas que se pueden aplicar al contenido en el sistema.',
@@ -103,6 +103,8 @@ return [
     'sort_rule_op_updated_date' => 'Fecha de actualización',
     'sort_rule_op_chapters_first' => 'Capítulos al inicio',
     'sort_rule_op_chapters_last' => 'Capítulos al final',
+    'sorting_page_limits' => 'Límites de visualización por página',
+    'sorting_page_limits_desc' => 'Establecer cuántos elementos a mostrar por página en varias listas dentro del sistema. Normalmente una cantidad más baja rendirá mejor, mientras que una cantidad más alta evita la necesidad de hacer clic a través de varias páginas. Se recomienda utilizar un múltiplo de 6.',
 
     // Maintenance settings
     'maint' => 'Mantenimiento',
@@ -196,14 +198,18 @@ return [
     'role_import_content' => 'Importar contenido',
     'role_editor_change' => 'Cambiar editor de página',
     'role_notifications' => 'Recibir y gestionar notificaciones',
+    'role_permission_note_users_and_roles' => 'Estos permisos proporcionarán también visibilidad y búsqueda de usuarios y roles en el sistema.',
     'role_asset' => 'Permisos de activos',
     'roles_system_warning' => 'Tenga en cuenta que el acceso a cualquiera de los tres permisos anteriores puede permitir a un usuario modificar sus propios privilegios o los privilegios de otros usuarios en el sistema. Asignar roles con estos permisos sólo a usuarios de comfianza.',
     'role_asset_desc' => 'Estos permisos controlan el acceso por defecto a los activos del sistema. Permisos definidos en Libros, Capítulos y Páginas ignorarán estos permisos.',
     'role_asset_admins' => 'Los administradores reciben automáticamente acceso a todo el contenido pero estas opciones pueden mostrar u ocultar opciones de UI.',
     'role_asset_image_view_note' => 'Esto se refiere a la visibilidad dentro del gestor de imágenes. El acceso real a los archivos de imágenes subidos, dependerá de la opción de almacenamiento de imágenes del sistema.',
+    'role_asset_users_note' => 'Estos permisos proporcionarán también visibilidad y búsqueda de usuarios en el sistema.',
     'role_all' => 'Todo',
     'role_own' => 'Propio',
+    'role_permission_aria' => ':action :resource: :value',
     'role_controlled_by_asset' => 'Controlado por el activo al que ha sido subido',
+    'role_controlled_by_page_delete' => 'Controlado por página de eliminación de permisos',
     'role_save' => 'Guardar rol',
     'role_users' => 'Usuarios en este rol',
     'role_users_none' => 'No hay usuarios asignados a este rol',
@@ -260,6 +266,9 @@ return [
     'users_mfa_desc' => 'Configure la autenticación de múltiples factores como una capa extra de seguridad para su cuenta de usuario.',
     'users_mfa_x_methods' => ':count método configurado|:count métodos configurados',
     'users_mfa_configure' => 'Configurar Métodos',
+    'users_mfa_reset' => 'Restablecer métodos de autenticación en dos pasos',
+    'users_mfa_reset_desc' => 'Esto restablecerá y borrará todos los métodos de autenticación en dos pasos configurados para este usuario. Si la autenticación en dos pasos es requerida por cualquiera de sus roles, se les pedirá que configuren nuevos métodos en su próximo inicio de sesión.',
+    'users_mfa_reset_confirm' => '¿Estás seguro de que deseas eliminar la autenticación en dos pasos para este usuario?',
 
     // API Tokens
     'user_api_token_create' => 'Crear token API',
@@ -359,7 +368,9 @@ return [
         'ru' => 'Ruso',
         'sk' => 'Eslovaco',
         'sl' => 'Esloveno',
+        'sr' => 'Српски',
         'sv' => 'Sueco',
+        'th' => 'ภาษาไทย',
         'tr' => 'Turco',
         'uk' => 'Ucraniano',
         'uz' => 'O‘zbekcha',

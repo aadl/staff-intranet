@@ -3,6 +3,8 @@
 namespace BookStack\Exports;
 
 use BookStack\Activity\ActivityType;
+use BookStack\Entities\Models\Book;
+use BookStack\Entities\Models\Chapter;
 use BookStack\Entities\Models\Entity;
 use BookStack\Entities\Queries\EntityQueries;
 use BookStack\Exceptions\FileUploadException;
@@ -16,6 +18,7 @@ use BookStack\Exports\ZipExports\ZipExportReader;
 use BookStack\Exports\ZipExports\ZipExportValidator;
 use BookStack\Exports\ZipExports\ZipImportRunner;
 use BookStack\Facades\Activity;
+use BookStack\Permissions\Permission;
 use BookStack\Uploads\FileStorage;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -39,11 +42,14 @@ class ImportRepo
         return $this->queryVisible()->get();
     }
 
+    /**
+     * @return Builder<Import>
+     */
     public function queryVisible(): Builder
     {
         $query = Import::query();
 
-        if (!userCan('settings-manage')) {
+        if (!userCan(Permission::SettingsManage)) {
             $query->where('created_by', user()->id);
         }
 
@@ -54,7 +60,7 @@ class ImportRepo
     {
         $query = Import::query();
 
-        if (!userCan('settings-manage')) {
+        if (!userCan(Permission::SettingsManage)) {
             $query->where('created_by', user()->id);
         }
 
@@ -115,6 +121,9 @@ class ImportRepo
         $parentModel = null;
         if ($import->type === 'page' || $import->type === 'chapter') {
             $parentModel = $parent ? $this->entityQueries->findVisibleByStringIdentifier($parent) : null;
+            if ($parentModel && !($parentModel instanceof Book || $parentModel instanceof Chapter)) {
+                throw new ZipImportException(['Selected parent is not a book or chapter']);
+            }
         }
 
         DB::beginTransaction();

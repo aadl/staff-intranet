@@ -6,6 +6,7 @@ use BookStack\Entities\Queries\ChapterQueries;
 use BookStack\Exports\ExportFormatter;
 use BookStack\Exports\ZipExports\ZipExportBuilder;
 use BookStack\Http\ApiController;
+use BookStack\Permissions\Permission;
 use Throwable;
 
 class ChapterExportApiController extends ApiController
@@ -14,7 +15,7 @@ class ChapterExportApiController extends ApiController
         protected ExportFormatter $exportFormatter,
         protected ChapterQueries $queries,
     ) {
-        $this->middleware('can:content-export');
+        $this->middleware(Permission::ContentExport->middleware());
     }
 
     /**
@@ -27,7 +28,7 @@ class ChapterExportApiController extends ApiController
         $chapter = $this->queries->findVisibleByIdOrFail($id);
         $pdfContent = $this->exportFormatter->chapterToPdf($chapter);
 
-        return $this->download()->directly($pdfContent, $chapter->slug . '.pdf');
+        return $this->createDownload()->directly($pdfContent, $chapter->slug . '.pdf');
     }
 
     /**
@@ -40,7 +41,7 @@ class ChapterExportApiController extends ApiController
         $chapter = $this->queries->findVisibleByIdOrFail($id);
         $htmlContent = $this->exportFormatter->chapterToContainedHtml($chapter);
 
-        return $this->download()->directly($htmlContent, $chapter->slug . '.html');
+        return $this->createDownload()->directly($htmlContent, $chapter->slug . '.html');
     }
 
     /**
@@ -51,7 +52,7 @@ class ChapterExportApiController extends ApiController
         $chapter = $this->queries->findVisibleByIdOrFail($id);
         $textContent = $this->exportFormatter->chapterToPlainText($chapter);
 
-        return $this->download()->directly($textContent, $chapter->slug . '.txt');
+        return $this->createDownload()->directly($textContent, $chapter->slug . '.txt');
     }
 
     /**
@@ -62,7 +63,7 @@ class ChapterExportApiController extends ApiController
         $chapter = $this->queries->findVisibleByIdOrFail($id);
         $markdown = $this->exportFormatter->chapterToMarkdown($chapter);
 
-        return $this->download()->directly($markdown, $chapter->slug . '.md');
+        return $this->createDownload()->directly($markdown, $chapter->slug . '.md');
     }
 
     /**
@@ -73,6 +74,6 @@ class ChapterExportApiController extends ApiController
         $chapter = $this->queries->findVisibleByIdOrFail($id);
         $zip = $builder->buildForChapter($chapter);
 
-        return $this->download()->streamedFileDirectly($zip, $chapter->slug . '.zip', true);
+        return $this->createDownload()->streamedFileDirectly($zip, $chapter->slug . '.zip', true);
     }
 }

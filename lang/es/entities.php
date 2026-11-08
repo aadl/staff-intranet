@@ -63,10 +63,10 @@ return [
     'import_delete_desc' => 'Esto eliminará el archivo ZIP de importación subido y no se puede deshacer.',
     'import_errors' => 'Errores de Importación',
     'import_errors_desc' => 'Se han producido los siguientes errores durante el intento de importación:',
-    'breadcrumb_siblings_for_page' => 'Navigate siblings for page',
-    'breadcrumb_siblings_for_chapter' => 'Navigate siblings for chapter',
-    'breadcrumb_siblings_for_book' => 'Navigate siblings for book',
-    'breadcrumb_siblings_for_bookshelf' => 'Navigate siblings for shelf',
+    'breadcrumb_siblings_for_page' => 'Navegar por páginas del mismo nivel',
+    'breadcrumb_siblings_for_chapter' => 'Navegar por capítulos del mismo nivel',
+    'breadcrumb_siblings_for_book' => 'Navegar por libros del mismo nivel',
+    'breadcrumb_siblings_for_bookshelf' => 'Navegar por estantes del mismo nivel',
 
     // Permissions and restrictions
     'permissions' => 'Permisos',
@@ -173,6 +173,7 @@ return [
     'books_sort_desc' => 'Mueve capítulos y páginas dentro de un libro para reorganizar su contenido. Se pueden añadir otros libros que permiten mover fácilmente capítulos y páginas entre libros. Opcionalmente, se puede establecer una regla de ordenación automática para ordenar automáticamente el contenido de este libro cuando haya cambios.',
     'books_sort_auto_sort' => 'Opción de ordenación automática',
     'books_sort_auto_sort_active' => 'Opción de ordenación activa: sortName',
+    'books_sort_auto_sort_creation_hint' => 'Las reglas para los ajustes de ordenación automática pueden ser creadas en el área de configuración "Listas y ordenación" por un usuario con los permisos pertinentes.',
     'books_sort_named' => 'Organizar libro :bookName',
     'books_sort_name' => 'Organizar por Nombre',
     'books_sort_created' => 'Organizar por Fecha de creación',
@@ -330,6 +331,9 @@ return [
 
     // Editor Sidebar
     'toggle_sidebar' => 'Mostrar/ocultar barra lateral',
+    'page_contents' => 'Contenido de Página',
+    'page_contents_none' => 'No se encontraron encabezados en el contenido de la página.',
+    'page_contents_info' => 'El menú de los contenidos de la página se genera a partir de cualquier formato de encabezado utilizado en la página.',
     'page_tags' => 'Etiquetas de Página',
     'chapter_tags' => 'Etiquetas de Capítulo',
     'book_tags' => 'Etiquetas de Libro',

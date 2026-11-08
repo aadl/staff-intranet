@@ -75,8 +75,8 @@ return [
     'reg_confirm_restrict_domain_placeholder' => 'कुनै प्रतिबन्ध छैन',
 
     // Sorting Settings
-    'sorting' => 'क्रमबद्धता',
-    'sorting_book_default' => 'डिफल्ट पुस्तक क्रम',
+    'sorting' => 'Lists & Sorting',
+    'sorting_book_default' => 'Default Book Sort Rule',
     'sorting_book_default_desc' => 'नयाँ पुस्तकहरूमा लागु गर्न डिफल्ट क्रम नियम चयन गर्नुहोस्। यो अस्तित्वमा रहेका पुस्तकहरूमा असर पार्दैन र पुस्तक अनुसार ओभरराइड गर्न सकिन्छ।',
     'sorting_rules' => 'क्रम नियमहरू',
     'sorting_rules_desc' => 'यी पूर्वनिर्धारित क्रम सञ्चालनहरू हुन् जुन प्रणालीमा सामग्रीमा लागू गर्न सकिन्छ।',
@@ -103,6 +103,8 @@ return [
     'sort_rule_op_updated_date' => 'अपडेट मिति',
     'sort_rule_op_chapters_first' => 'पहिले अध्यायहरू',
     'sort_rule_op_chapters_last' => 'अन्त्यमा अध्यायहरू',
+    'sorting_page_limits' => 'Per-Page Display Limits',
+    'sorting_page_limits_desc' => 'Set how many items to show per-page in various lists within the system. Typically a lower amount will be more performant, while a higher amount avoids the need to click through multiple pages. Using a multiple of 6 is recommended.',
 
     // Maintenance settings
     'maint' => 'सम्भार',
@@ -195,14 +197,18 @@ return [
     'role_import_content' => 'सामग्री आयात गर्नुहोस्',
     'role_editor_change' => 'पृष्ठ सम्पादक परिवर्तन गर्नुहोस्',
     'role_notifications' => 'सूचनाहरू प्राप्त र व्यवस्थापन गर्नुहोस्',
+    'role_permission_note_users_and_roles' => 'These permissions will technically also provide visibility & searching of users & roles in the system.',
     'role_asset' => 'संपत्ति अनुमति',
     'roles_system_warning' => 'माथिका कुनै पनि तीन अनुमति प्रयोगकर्ताले आफैं वा अरूका अधिकार परिवर्तन गर्न सक्छन्। यी अनुमति भएको भूमिका मात्र भरपर्दो प्रयोगकर्तालाई दिनुहोस्।',
     'role_asset_desc' => 'यी अनुमतिले प्रणालीभित्र सम्पत्तिमा डिफल्ट पहुँच नियन्त्रण गर्छ। पुस्तक, अध्याय र पृष्ठमा अनुमति यी भन्दा प्राथमिक हुन्छ।',
     'role_asset_admins' => 'प्रशासनकर्ताहरूलाई सबै सामग्रीमा स्वतः पहुँच दिइन्छ, यी विकल्पहरूले UI मा देखिने वा लुकेका विकल्पहरू मात्र प्रभाव पार्न सक्छ।',
     'role_asset_image_view_note' => 'यो छवि व्यवस्थापक भित्रको दृश्यता सम्बन्धि हो। अपलोड गरिएको छविमा वास्तविक पहुँच प्रणालीको छवि भण्डारण विकल्प अनुसार हुन्छ।',
+    'role_asset_users_note' => 'These permissions will technically also provide visibility & searching of users in the system.',
     'role_all' => 'सबै',
     'role_own' => 'आफ्नो',
+    'role_permission_aria' => ':action :resource: :value',
     'role_controlled_by_asset' => 'अपलोड गरिएको सम्पत्तिले नियन्त्रण गरेको',
+    'role_controlled_by_page_delete' => 'Controlled by page delete permissions',
     'role_save' => 'भूमिका सुरक्षित गर्नुहोस्',
     'role_users' => 'यस भूमिकाका प्रयोगकर्ताहरू',
     'role_users_none' => 'यो भूमिकामा हाल कुनै प्रयोगकर्ता छैन',
@@ -259,6 +265,9 @@ return [
     'users_mfa_desc' => 'तपाईंको प्रयोगकर्ता खाताको लागि थप सुरक्षा तहको रूपमा बहु-फ्याक्टर प्रमाणीकरण सेटअप गर्नुहोस्।',
     'users_mfa_x_methods' => ':count विधि सेटअप गरिएको|:count विधिहरू सेटअप गरिएको',
     'users_mfa_configure' => 'विधिहरू सेटअप गर्नुहोस्',
+    'users_mfa_reset' => 'Reset Multi-Factor Authentication Methods',
+    'users_mfa_reset_desc' => 'This will reset and clear all configured multi-factor authentication methods for this user. If multi-factor authentication is required by any of their roles, they\'ll be prompted to configure new methods on their next login.',
+    'users_mfa_reset_confirm' => 'Are you sure you want to reset multi-factor authentication for this user?',
 
     // API Tokens
     'user_api_token_create' => 'API टोकन सिर्जना गर्नुहोस्',
@@ -358,7 +367,9 @@ return [
         'ru' => 'Русский',
         'sk' => 'Slovensky',
         'sl' => 'Slovenščina',
+        'sr' => 'Српски',
         'sv' => 'Svenska',
+        'th' => 'ภาษาไทย',
         'tr' => 'Türkçe',
         'uk' => 'Українська',
         'uz' => 'O‘zbekcha',

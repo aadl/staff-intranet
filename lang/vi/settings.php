@@ -75,8 +75,8 @@ return [
     'reg_confirm_restrict_domain_placeholder' => 'Không có giới hạn nào được thiết lập',
 
     // Sorting Settings
-    'sorting' => 'Sắp xếp',
-    'sorting_book_default' => 'Sắp xếp sách mặc định',
+    'sorting' => 'Lists & Sorting',
+    'sorting_book_default' => 'Default Book Sort Rule',
     'sorting_book_default_desc' => 'Chọn quy tắc sắp xếp mặc định để áp dụng cho sách mới. Điều này sẽ không ảnh hưởng đến các sách hiện có và có thể được ghi đè cho từng sách.',
     'sorting_rules' => 'Quy tắc sắp xếp',
     'sorting_rules_desc' => 'Đây là các thao tác sắp xếp được xác định trước có thể được áp dụng cho nội dung trong hệ thống.',
@@ -103,6 +103,8 @@ return [
     'sort_rule_op_updated_date' => 'Ngày cập nhật',
     'sort_rule_op_chapters_first' => 'Chương trước',
     'sort_rule_op_chapters_last' => 'Chương sau',
+    'sorting_page_limits' => 'Per-Page Display Limits',
+    'sorting_page_limits_desc' => 'Set how many items to show per-page in various lists within the system. Typically a lower amount will be more performant, while a higher amount avoids the need to click through multiple pages. Using a multiple of 6 is recommended.',
 
     // Maintenance settings
     'maint' => 'Bảo trì',
@@ -195,14 +197,18 @@ return [
     'role_import_content' => 'Nhập nội dung',
     'role_editor_change' => 'Thay đổi trình soạn thảo trang',
     'role_notifications' => 'Nhận & quản lý thông báo',
+    'role_permission_note_users_and_roles' => 'These permissions will technically also provide visibility & searching of users & roles in the system.',
     'role_asset' => 'Quyền tài sản (asset)',
     'roles_system_warning' => 'Cần lưu ý rằng việc truy cập vào bất kỳ ba quyền trên có thể cho phép người dùng thay đổi đặc quyền của chính họ hoặc đặc quyền của những người khác trong hệ thống. Chỉ gán các vai trò có các quyền này cho những người dùng đáng tin cậy.',
     'role_asset_desc' => 'Các quyền này điều khiển truy cập mặc định tới tài sản (asset) nằm trong hệ thống. Quyền tại Sách, Chương và Trang sẽ ghi đè các quyền này.',
     'role_asset_admins' => 'Quản trị viên được tự động cấp quyền truy cập đến toàn bộ nội dung, tuy nhiên các tùy chọn đó có thể hiện hoặc ẩn tùy chọn giao diện.',
     'role_asset_image_view_note' => 'Điều này liên quan đến khả năng hiển thị trong trình quản lý hình ảnh. Quyền truy cập thực tế vào các tệp hình ảnh đã tải lên sẽ phụ thuộc vào tùy chọn lưu trữ hình ảnh của hệ thống.',
+    'role_asset_users_note' => 'These permissions will technically also provide visibility & searching of users in the system.',
     'role_all' => 'Tất cả',
     'role_own' => 'Sở hữu',
+    'role_permission_aria' => ':action :resource: :value',
     'role_controlled_by_asset' => 'Kiểm soát các tài sản (asset) người dùng tải lên',
+    'role_controlled_by_page_delete' => 'Controlled by page delete permissions',
     'role_save' => 'Lưu Quyền',
     'role_users' => 'Người dùng được gán quyền này',
     'role_users_none' => 'Không có người dùng nào hiện được gán quyền này',
@@ -259,6 +265,9 @@ return [
     'users_mfa_desc' => 'Thiết lập xác thực đa yếu tố như một lớp bảo mật bổ sung cho tài khoản người dùng của bạn.',
     'users_mfa_x_methods' => ':count phương thức đã cấu hình|:count phương thức đã cấu hình',
     'users_mfa_configure' => 'Cấu hình phương thức',
+    'users_mfa_reset' => 'Reset Multi-Factor Authentication Methods',
+    'users_mfa_reset_desc' => 'This will reset and clear all configured multi-factor authentication methods for this user. If multi-factor authentication is required by any of their roles, they\'ll be prompted to configure new methods on their next login.',
+    'users_mfa_reset_confirm' => 'Are you sure you want to reset multi-factor authentication for this user?',
 
     // API Tokens
     'user_api_token_create' => 'Tạo Token API',
@@ -358,7 +367,9 @@ return [
         'ru' => 'Русский',
         'sk' => 'Slovensky',
         'sl' => 'Slovenščina',
+        'sr' => 'Српски',
         'sv' => 'Svenska',
+        'th' => 'ภาษาไทย',
         'tr' => 'Türkçe',
         'uk' => 'Українська',
         'uz' => 'O‘zbekcha',

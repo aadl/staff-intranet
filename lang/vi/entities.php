@@ -60,13 +60,13 @@ return [
     'import_location' => 'Vị trí nhập',
     'import_location_desc' => 'Chọn vị trí đích cho nội dung đã nhập của bạn. Bạn sẽ cần các quyền liên quan để tạo trong vị trí bạn chọn.',
     'import_delete_confirm' => 'Bạn có chắc chắn muốn xóa lượt nhập này không?',
-    'import_delete_desc' => 'Thao tác này sẽ xóa tệp ZIP nhập đã tải lên và không thể hoàn tác.',
-    'import_errors' => 'Lỗi nhập',
+    'import_delete_desc' => 'Thao tác này sẽ xóa tệp ZIP đã tải lên, và không thể hoàn tác.',
+    'import_errors' => 'Lỗi khi nhập dữ liệu',
     'import_errors_desc' => 'Các lỗi sau đã xảy ra trong quá trình nhập:',
-    'breadcrumb_siblings_for_page' => 'Navigate siblings for page',
-    'breadcrumb_siblings_for_chapter' => 'Navigate siblings for chapter',
-    'breadcrumb_siblings_for_book' => 'Navigate siblings for book',
-    'breadcrumb_siblings_for_bookshelf' => 'Navigate siblings for shelf',
+    'breadcrumb_siblings_for_page' => 'Điều hướng anh chị em cho trang',
+    'breadcrumb_siblings_for_chapter' => 'Điều hướng anh chị em cho chương',
+    'breadcrumb_siblings_for_book' => 'Điều hướng anh chị em cho sách',
+    'breadcrumb_siblings_for_bookshelf' => 'Điều hướng anh chị em cho kệ sách',
 
     // Permissions and restrictions
     'permissions' => 'Quyền',
@@ -173,6 +173,7 @@ return [
     'books_sort_desc' => 'Di chuyển các chương và trang trong một cuốn sách để sắp xếp lại nội dung của nó. Các sách khác có thể được thêm vào để dễ dàng di chuyển các chương và trang giữa các sách. Tùy chọn, một quy tắc sắp xếp tự động có thể được đặt để tự động sắp xếp nội dung cuốn sách này khi có thay đổi.',
     'books_sort_auto_sort' => 'Tùy chọn sắp xếp tự động',
     'books_sort_auto_sort_active' => 'Sắp xếp tự động đang hoạt động: :sortName',
+    'books_sort_auto_sort_creation_hint' => 'Auto sort option rules can be created in the "Lists & Sorting" settings area by a user with the relevant permissions.',
     'books_sort_named' => 'Sắp xếp sách :bookName',
     'books_sort_name' => 'Sắp xếp theo tên',
     'books_sort_created' => 'Sắp xếp theo ngày tạo',
@@ -330,6 +331,9 @@ return [
 
     // Editor Sidebar
     'toggle_sidebar' => 'Chuyển đổi thanh bên',
+    'page_contents' => 'Page Contents',
+    'page_contents_none' => 'No headings were found in the page content.',
+    'page_contents_info' => 'The contents menu is generated from any heading formats used in the page.',
     'page_tags' => 'Các Thẻ Trang',
     'chapter_tags' => 'Các Thẻ Chương',
     'book_tags' => 'Các Thẻ Sách',

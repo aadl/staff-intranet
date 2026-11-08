@@ -16,6 +16,7 @@ return [
     'alpha_num'            => ':attribute मा अक्षर र अंक मात्र हुनुपर्छ।',
     'array'                => ':attribute array हुनुपर्छ।',
     'backup_codes'         => 'दिइएको कोड गलत छ वा पहिल्यै प्रयोग भइसकेको छ।',
+    'base64_uri_mime'      => 'The :attribute must be a valid base64 URI containing data of :mime mime type.',
     'before'               => ':attribute मिति :date भन्दा पहिला हुनुपर्छ।',
     'between'              => [
         'numeric' => ':attribute :min देखि :max बीचमा हुनुपर्छ।',
@@ -25,6 +26,7 @@ return [
     ],
     'boolean'              => ':attribute साँचो (true) वा झूटो (false) हुनुपर्छ।',
     'confirmed'            => ':attribute पुष्टि मिलेन।',
+    'current_password'     => 'This does not match your current password.',
     'date'                 => ':attribute मान्य मिति होइन।',
     'date_format'          => ':attribute ढाँचा :format सँग मेल खाँदैन।',
     'different'            => ':attribute र :other फरक हुनुपर्छ।',
@@ -106,6 +108,7 @@ return [
     'uploaded'             => 'फाइल अपलोड हुन सकेन। सर्भरले यस्तो साइज स्वीकार नगर्न सक्छ।',
 
     'zip_file' => ':attribute ले ZIP फाइलभित्रको फाइल देखाउनु पर्छ।',
+    'zip_file_size' => 'The file :attribute must not exceed :size MB.',
     'zip_file_mime' => ':attribute मा :validTypes प्रकारको फाइल हुनुपर्छ, तर :foundType भेटियो।',
     'zip_model_expected' => 'डेटा वस्तु चाहिएको थियो तर ":type" भेटियो।',
     'zip_unique' => ':attribute ZIP भित्रको वस्तु प्रकारको लागि अद्वितीय हुनुपर्छ।',

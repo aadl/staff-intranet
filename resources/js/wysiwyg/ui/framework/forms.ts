@@ -98,6 +98,23 @@ export class EditorForm extends EditorContainerUiElement {
         this.definition = definition;
     }
 
+    focusOnFirst() {
+        const focusable = this.getDOMElement().querySelector('input,select,textarea');
+        if (focusable) {
+            (focusable as HTMLElement).focus();
+        }
+    }
+
+    getValues(): Record<string, string> {
+        const values: Record<string, string> = {};
+        const formEl = this.getDOMElement() as HTMLFormElement;
+        const formData = new FormData(formEl);
+        for (const [name, value] of formData.entries()) {
+            values[name] = value as string;
+        }
+        return values;
+    }
+
     setValues(values: Record<string, string>) {
         for (const name of Object.keys(values)) {
             const field = this.getFieldByName(name);
